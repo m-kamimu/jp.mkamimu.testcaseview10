@@ -263,9 +263,16 @@ public class SelectionView extends ViewPart {
 		parser.setSource(unit);
 		
 		CompilationUnit unitp = (CompilationUnit)parser.createAST(new NullProgressMonitor());
+		
 		ASTVisitorImpl astvis = new ASTVisitorImpl(unitp, this.globalTestInformation);
 		unitp.accept(astvis);
+		astvis.countup();
 		
+		unitp.accept(astvis);		
+		astvis.printassertarglist();
+		astvis.printarglist();
+		
+		/*
 		IResource irs = ((ICompilationUnit) unit).getCorrespondingResource();
 		a1[0] = SampleMarker.createMarker(irs, astvis.localTestInformation, globalTestInformation);
 		a1[1] = SampleMarker10.createMarker(irs, astvis.localTestInformation, globalTestInformation);
@@ -339,7 +346,7 @@ public class SelectionView extends ViewPart {
 			strbuf.delete(0, strbuf.length());
 		}
 		//str.add(SampleMarker2.getLastm2()); // normal method info?
-		
+		*/
 		return str.toString();
 	}
 	

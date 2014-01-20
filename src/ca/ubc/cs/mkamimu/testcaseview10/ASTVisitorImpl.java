@@ -1,5 +1,7 @@
 package ca.ubc.cs.mkamimu.testcaseview10;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Stack;
 
 import org.eclipse.jdt.core.dom.ASTVisitor;
@@ -18,6 +20,13 @@ public class ASTVisitorImpl extends ASTVisitor {
 	CompilationUnit cu;
 	TestInformation localTestInformation = new TestInformation();	
 	TestInformation globalTestInformation = null;
+	
+	private int countflag = 0;
+	
+	public void countup() {
+		countflag++;
+	}
+	
 	
 	ASTVisitorImpl(CompilationUnit cu, TestInformation testinfo) {
 		this.cu = cu;
@@ -86,6 +95,23 @@ public class ASTVisitorImpl extends ASTVisitor {
 		super.endVisit(node);
 	}
 	
+	List<List<String>> arglist = new ArrayList();
+	List<String> assertarglist = new ArrayList();
+	
+	public void printassertarglist() {
+		for(int i = 0; i < assertarglist.size(); i++) {
+			System.out.println("assertarglist: " + assertarglist.get(i).toString());
+		}		
+	}
+
+	public void printarglist() {
+		for(int i = 0; i < arglist.size(); i++) {
+			System.out.println("arglist: " + arglist.get(i).toString());
+		}		
+	}
+
+	
+	
 	private boolean assertFlag = false;
 	/* (non-Javadoc)
 	 * @see org.eclipse.jdt.core.dom.ASTVisitor#visit(org.eclipse.jdt.core.dom.MethodInvocation)
@@ -93,14 +119,19 @@ public class ASTVisitorImpl extends ASTVisitor {
 	@Override
 	public boolean visit(MethodInvocation node) {
 		// TODO Auto-generated method stub
-		if (assertFlag || node.getName().toString().startsWith("assert")) {
+		if ((assertFlag || node.getName().toString().startsWith("assert")) && countflag == 0) {
 			// test 
 			System.out.println("assertnodeinfo:" + node.toString());
 			System.out.println("assertarg:" + node.arguments().toString());
+			
+			for(int i = 0; i < node.arguments().size(); i++) {
+				assertarglist.add(node.arguments().get(i).toString());
+			}
+			
 			System.out.println("assertname: " + node.getName());
 			System.out.println("assertnodep:" + node.getExpression());
 			
-			
+			/*
 			if(!globalTestInformation.isLock()) {
 				globalTestInformation.getMethodADList().add(currentMethod.peek());				
 				globalTestInformation.getMethodAList().add(node.toString());
@@ -142,14 +173,38 @@ public class ASTVisitorImpl extends ASTVisitor {
 			*/
 			assertFlag = true;
 		} else {
-			
+			boolean tmpflag = false;
+			if (countflag > 0) {
+
+				for(int i = 0; i < node.arguments().size(); i++) {
+					if (assertarglist.contains(node.arguments().get(i).toString())) {
+						tmpflag = true;
+					}
+				}
+	
+				
 			// test 
 			System.out.println("othernodeinfo:" + node.toString());
 			System.out.println("otherarg:" + node.arguments().toString());
 			System.out.println("othername: " + node.getName());
 			System.out.println("othernodep:" + node.getExpression());
-
 			
+			if (tmpflag) {
+			List<String> arglistcount = new ArrayList();
+			for(int i = 0; i < node.arguments().size(); i++) {
+				arglistcount.add(node.arguments().get(i).toString());
+			}
+			if (arglist.size() > countflag) {
+				List<String> tmparglistcount = arglist.get(countflag);
+				tmparglistcount.addAll(arglistcount);
+				arglist.set(countflag, tmparglistcount);
+			} else {
+				arglist.add(arglistcount);
+			}
+			
+			}
+			}
+			/*
 			if(!globalTestInformation.isLock()) {
 				globalTestInformation.getMethodIDList().add(currentMethod.peek());				
 				globalTestInformation.getMethodIList().add(node.toString());
@@ -227,8 +282,22 @@ public class ASTVisitorImpl extends ASTVisitor {
 		//System.out.println("cothername: " + node.getName());
 		System.out.println("cothernodep:" + node.getExpression());
 
+		List<String> arglistcount = new ArrayList();
+		for(int i = 0; i < node.arguments().size(); i++) {
+			arglistcount.add(node.arguments().get(i).toString());
+			
+			//arglistcount.add(node.getExpression().toString());			
+
+		}
+		if (arglist.size() > countflag) {
+			List<String> tmparglistcount = arglist.get(countflag);
+			tmparglistcount.addAll(arglistcount);
+			arglist.set(countflag, tmparglistcount);
+		} else {
+			arglist.add(arglistcount);
+		}
 		
-		
+		/*
 		// TODO Auto-generated method stub
 		if(!globalTestInformation.isLock()) {
 			globalTestInformation.getMethodIDList().add(currentMethod.peek());				
@@ -258,7 +327,7 @@ public class ASTVisitorImpl extends ASTVisitor {
 		} else {
 			localTestInformation.getExprOnlyIList().add("");				
 		}
-
+		*/
 		return super.visit(node);
 	}
 	
