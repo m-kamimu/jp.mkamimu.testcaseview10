@@ -195,9 +195,17 @@ public class ASTVisitorImpl extends ASTVisitor {
 			boolean tmpflag = false;
 			if (countflag > 0) {
 
-				for(int i = 0; i < node.arguments().size(); i++) {
-					if (assertarglist.contains(node.arguments().get(i).toString())) {
-						tmpflag = true;
+				if (countflag == 1) {
+					for(int i = 0; i < node.arguments().size(); i++) {
+						if (assertarglist.contains(node.arguments().get(i).toString())) {
+							tmpflag = true;
+						}
+					}
+				} else if (arglist.size() > 0) {
+					for(int i = 0; i < node.arguments().size(); i++) {
+						if (arglist.get(countflag - 2).contains(node.arguments().get(i).toString())) {
+							tmpflag = true;
+						}
 					}
 				}
 		
@@ -215,19 +223,20 @@ public class ASTVisitorImpl extends ASTVisitor {
 				}
 				wholelistcount.add(node.toString());
 				
-				if (arglist.size() > countflag) {
-					List<String> tmparglistcount = arglist.get(countflag);
+				if (arglist.size() > countflag - 1) {
+					List<String> tmparglistcount = arglist.get(countflag - 1);
 					tmparglistcount.addAll(arglistcount);
-					arglist.set(countflag, tmparglistcount);
+					arglist.set(countflag - 1, tmparglistcount);
 					
-					List<String> tmpwholelistcount = wholelist.get(countflag);
+					List<String> tmpwholelistcount = wholelist.get(countflag - 1);
 					tmpwholelistcount.addAll(wholelistcount);
-					wholelist.set(countflag, tmpwholelistcount);
+					wholelist.set(countflag - 1, tmpwholelistcount);
 					
 				} else {
-					arglist.add(arglistcount);
-					
-					wholelist.add(wholelistcount);
+					if (!arglist.contains(arglistcount)) {
+						arglist.add(arglistcount);
+						wholelist.add(wholelistcount);
+					}
 				}
 				
 			}
@@ -308,9 +317,17 @@ public class ASTVisitorImpl extends ASTVisitor {
 		boolean tmpflag = false;
 		if (countflag > 0) {
 
-			for(int i = 0; i < node.arguments().size(); i++) {
-				if (assertarglist.contains(node.arguments().get(i).toString())) {
-					tmpflag = true;
+			if (countflag == 1) {
+				for(int i = 0; i < node.arguments().size(); i++) {
+					if (assertarglist.contains(node.arguments().get(i).toString())) {
+						tmpflag = true;
+					}
+				}
+			} else if (arglist.size() > 0) {
+				for(int i = 0; i < node.arguments().size(); i++) {
+					if (arglist.get(countflag - 2).contains(node.arguments().get(i).toString())) {
+						tmpflag = true;
+					}
 				}
 			}
 	
@@ -331,18 +348,20 @@ public class ASTVisitorImpl extends ASTVisitor {
 			}
 			wholelistcount.add(node.toString());
 			
-			if (arglist.size() > countflag) {
-				List<String> tmparglistcount = arglist.get(countflag);
+			if (arglist.size() > countflag - 1) {
+				List<String> tmparglistcount = arglist.get(countflag - 1);
 				tmparglistcount.addAll(arglistcount);
-				arglist.set(countflag, tmparglistcount);
+				arglist.set(countflag - 1, tmparglistcount);
 				
-				List<String> tmpwholelistcount = wholelist.get(countflag);
+				List<String> tmpwholelistcount = wholelist.get(countflag - 1);
 				tmpwholelistcount.addAll(wholelistcount);
-				wholelist.set(countflag, tmpwholelistcount);
+				wholelist.set(countflag - 1, tmpwholelistcount);
 				
 			} else {
-				arglist.add(arglistcount);
-				wholelist.add(wholelistcount);
+				if (!arglist.contains(arglistcount)) {
+					arglist.add(arglistcount);
+					wholelist.add(wholelistcount);
+				}
 			}
 		}
 		}

@@ -268,7 +268,12 @@ public class SelectionView extends ViewPart {
 		unitp.accept(astvis);
 		astvis.countup();
 		
-		unitp.accept(astvis);		
+		unitp.accept(astvis);
+		
+		astvis.countup();
+		
+		unitp.accept(astvis);
+		
 		astvis.printassertarglist();
 		astvis.printarglist();
 
