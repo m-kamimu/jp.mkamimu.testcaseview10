@@ -8,7 +8,7 @@
             id="ca.ubc.cs.mkamimu.testcaseview10">
       </category>
       <view
-            icon="icons/sample.gif"
+            icon=""
             category="ca.ubc.cs.mkamimu.testcaseview10"
             class="ca.ubc.cs.mkamimu.testcaseview10.SelectionView"
             id="ca.ubc.cs.mkamimu.testcaseview10.SelectionView"

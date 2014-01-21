@@ -271,6 +271,10 @@ public class SelectionView extends ViewPart {
 		unitp.accept(astvis);		
 		astvis.printassertarglist();
 		astvis.printarglist();
+
+		astvis.printassertwholelist();
+		astvis.printwholelist();
+
 		
 		/*
 		IResource irs = ((ICompilationUnit) unit).getCorrespondingResource();

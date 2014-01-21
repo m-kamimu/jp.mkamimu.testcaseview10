@@ -98,6 +98,10 @@ public class ASTVisitorImpl extends ASTVisitor {
 	List<List<String>> arglist = new ArrayList();
 	List<String> assertarglist = new ArrayList();
 	
+	List<List<String>> wholelist = new ArrayList();
+	List<String> wholeassertarglist = new ArrayList();
+	
+	
 	public void printassertarglist() {
 		for(int i = 0; i < assertarglist.size(); i++) {
 			System.out.println("assertarglist: " + assertarglist.get(i).toString());
@@ -110,6 +114,20 @@ public class ASTVisitorImpl extends ASTVisitor {
 		}		
 	}
 
+	
+	public void printassertwholelist() {
+		for(int i = 0; i < wholeassertarglist.size(); i++) {
+			System.out.println("assertwholelist: " + wholeassertarglist.get(i).toString());
+		}		
+	}
+
+	public void printwholelist() {
+		for(int i = 0; i < wholelist.size(); i++) {
+			System.out.println("wholelist: " + wholelist.get(i).toString());
+		}		
+	}
+
+	
 	
 	
 	private boolean assertFlag = false;
@@ -127,6 +145,7 @@ public class ASTVisitorImpl extends ASTVisitor {
 			for(int i = 0; i < node.arguments().size(); i++) {
 				assertarglist.add(node.arguments().get(i).toString());
 			}
+			wholeassertarglist.add(node.toString());
 			
 			System.out.println("assertname: " + node.getName());
 			System.out.println("assertnodep:" + node.getExpression());
@@ -181,8 +200,6 @@ public class ASTVisitorImpl extends ASTVisitor {
 						tmpflag = true;
 					}
 				}
-	
-				
 		
 			if (tmpflag) {
 				// test 
@@ -192,15 +209,25 @@ public class ASTVisitorImpl extends ASTVisitor {
 				System.out.println("othernodep:" + node.getExpression());
 				
 				List<String> arglistcount = new ArrayList();
+				List<String> wholelistcount = new ArrayList();
 				for(int i = 0; i < node.arguments().size(); i++) {
 					arglistcount.add(node.arguments().get(i).toString());
 				}
+				wholelistcount.add(node.toString());
+				
 				if (arglist.size() > countflag) {
 					List<String> tmparglistcount = arglist.get(countflag);
 					tmparglistcount.addAll(arglistcount);
 					arglist.set(countflag, tmparglistcount);
+					
+					List<String> tmpwholelistcount = wholelist.get(countflag);
+					tmpwholelistcount.addAll(wholelistcount);
+					wholelist.set(countflag, tmpwholelistcount);
+					
 				} else {
 					arglist.add(arglistcount);
+					
+					wholelist.add(wholelistcount);
 				}
 				
 			}
@@ -296,18 +323,26 @@ public class ASTVisitorImpl extends ASTVisitor {
 			System.out.println("cothernodep:" + node.getExpression());
 	
 			List<String> arglistcount = new ArrayList();
+			List<String> wholelistcount = new ArrayList();
+
 			for(int i = 0; i < node.arguments().size(); i++) {
 				arglistcount.add(node.arguments().get(i).toString());
-				
 				//arglistcount.add(node.getExpression().toString());			
-	
 			}
+			wholelistcount.add(node.toString());
+			
 			if (arglist.size() > countflag) {
 				List<String> tmparglistcount = arglist.get(countflag);
 				tmparglistcount.addAll(arglistcount);
 				arglist.set(countflag, tmparglistcount);
+				
+				List<String> tmpwholelistcount = wholelist.get(countflag);
+				tmpwholelistcount.addAll(wholelistcount);
+				wholelist.set(countflag, tmpwholelistcount);
+				
 			} else {
 				arglist.add(arglistcount);
+				wholelist.add(wholelistcount);
 			}
 		}
 		}
