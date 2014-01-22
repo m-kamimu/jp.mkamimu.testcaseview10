@@ -107,6 +107,8 @@ public class ASTVisitorImpl extends ASTVisitor {
 	List<String> wholeassertarglist = new ArrayList();
 	
 	
+	
+	
 	public String printassertarglist() {
 		StringBuffer strbuf = new StringBuffer();
 		for(int i = 0; i < assertarglist.size(); i++) {
@@ -210,7 +212,7 @@ public class ASTVisitorImpl extends ASTVisitor {
 					}
 					
 					for(int j = 2; j <= countflag; j++) {
-						if (wholelist.get(j - 2).contains(node.toString())) {
+						if (wholelist.get(j - 2).contains(node.getParent().toString().replaceAll("\n", ""))) {
 							tmpflag = false;
 						}
 					}
@@ -236,7 +238,8 @@ public class ASTVisitorImpl extends ASTVisitor {
 					arglistcount.add(node.getExpression().toString());
 				}
 
-				wholelistcount.add(node.toString());
+				//wholelistcount.add(node.toString());
+				wholelistcount.add(node.getParent().toString().replaceAll("\n", ""));
 				
 				if (arglist.size() > countflag - 1) {
 					List<String> tmparglistcount = arglist.get(countflag - 1);
@@ -314,7 +317,7 @@ public class ASTVisitorImpl extends ASTVisitor {
 				}
 				
 				for(int j = 2; j <= countflag; j++) {
-					if (wholelist.get(j - 2).contains(node.toString())) {
+					if (wholelist.get(j - 2).contains(node.getParent().toString().replaceAll("\n",""))) {
 						tmpflag = false;
 					}
 				}
@@ -340,7 +343,8 @@ public class ASTVisitorImpl extends ASTVisitor {
 				//arglistcount.add(node.arguments().get(i).toString());
 				//arglistcount.add(node.getExpression().toString());			
 			}
-			wholelistcount.add(node.toString());
+			//wholelistcount.add(node.toString());
+			wholelistcount.add(node.getParent().toString().replaceAll("\n",""));
 			
 			if (arglist.size() > countflag - 1) {
 				List<String> tmparglistcount = arglist.get(countflag - 1);
@@ -407,7 +411,7 @@ public class ASTVisitorImpl extends ASTVisitor {
 				*/}
 				
 				for(int j = 2; j <= countflag && j < wholelist.size() + 1; j++) {
-					if (wholelist.get(j - 2).contains(node.toString())) {
+					if (wholelist.get(j - 2).contains(node.getParent().toString().replaceAll("\n",""))) {
 						tmpflag = false;
 					}
 				}
@@ -440,7 +444,8 @@ public class ASTVisitorImpl extends ASTVisitor {
 				//arglistcount.add(node.arguments().get(i).toString());
 				//arglistcount.add(node.getExpression().toString());			
 			}*/
-			wholelistcount.add(node.toString());
+			//wholelistcount.add(node.toString());
+			wholelistcount.add(node.getParent().toString().replaceAll("\n", ""));
 			
 			if (arglist.size() > countflag - 1) {
 				List<String> tmparglistcount = arglist.get(countflag - 1);
@@ -536,7 +541,7 @@ public class ASTVisitorImpl extends ASTVisitor {
 				*/}
 				
 				for(int j = 2; j <= countflag && j <= wholelist.size() + 1; j++) {
-					if (wholelist.get(j - 2).contains(node.toString())) {
+					if (wholelist.get(j - 2).contains(node.getParent().toString().replaceAll("\n", ""))) {
 						tmpflag = false;
 					}
 				}
@@ -569,7 +574,8 @@ public class ASTVisitorImpl extends ASTVisitor {
 				//arglistcount.add(node.arguments().get(i).toString());
 				//arglistcount.add(node.getExpression().toString());			
 			}*/
-			wholelistcount.add(node.toString());
+			//wholelistcount.add(node.toString());
+			wholelistcount.add(node.getParent().toString().replaceAll("\n", ""));
 			
 			if (arglist.size() > countflag - 1) {
 				List<String> tmparglistcount = arglist.get(countflag - 1);
