@@ -385,7 +385,7 @@ public class ASTVisitorImpl extends ASTVisitor {
 					tmpflag = true;
 				*/}
 				
-				for(int j = 2; j <= countflag; j++) {
+				for(int j = 2; j <= countflag && j < wholelist.size() + 1; j++) {
 					if (wholelist.get(j - 2).contains(node.toString())) {
 						tmpflag = false;
 					}
@@ -514,7 +514,7 @@ public class ASTVisitorImpl extends ASTVisitor {
 					tmpflag = true;
 				*/}
 				
-				for(int j = 2; j <= countflag; j++) {
+				for(int j = 2; j <= countflag && j <= wholelist.size() + 1; j++) {
 					if (wholelist.get(j - 2).contains(node.toString())) {
 						tmpflag = false;
 					}
