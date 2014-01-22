@@ -188,8 +188,10 @@ public class ASTVisitorImpl extends ASTVisitor {
 						tmpflag = true;
 					}
 					
-					if (wholelist.get(countflag - 2).contains(node.toString())) {
-						tmpflag = false;
+					for(int j = 2; j <= countflag; j++) {
+						if (wholelist.get(j - 2).contains(node.toString())) {
+							tmpflag = false;
+						}
 					}
 
 				}
@@ -215,7 +217,7 @@ public class ASTVisitorImpl extends ASTVisitor {
 
 				wholelistcount.add(node.toString());
 				
-				if (arglist.size() > countflag) {
+				if (arglist.size() > countflag - 1) {
 					List<String> tmparglistcount = arglist.get(countflag - 1);
 					tmparglistcount.addAll(arglistcount);
 					arglist.set(countflag - 1, tmparglistcount);
@@ -291,8 +293,10 @@ public class ASTVisitorImpl extends ASTVisitor {
 					tmpflag = true;
 				}
 				
-				if (wholelist.get(countflag - 2).contains(node.toString())) {
-					tmpflag = false;
+				for(int j = 2; j <= countflag; j++) {
+					if (wholelist.get(j - 2).contains(node.toString())) {
+						tmpflag = false;
+					}
 				}
 
 			}
@@ -331,7 +335,7 @@ public class ASTVisitorImpl extends ASTVisitor {
 			}
 			wholelistcount.add(node.toString());
 			
-			if (arglist.size() > countflag) {
+			if (arglist.size() > countflag - 1) {
 				List<String> tmparglistcount = arglist.get(countflag - 1);
 				tmparglistcount.addAll(arglistcount);
 				arglist.set(countflag - 1, tmparglistcount);
