@@ -291,14 +291,13 @@ public class SelectionView extends ViewPart {
 		astvis.countup();
 		unitp.accept(astvis);
 
-
 		
 		astvis.printassertarglist();
 		astvis.printarglist();
 
-		astvis.printassertwholelist();
-		astvis.printwholelist();
-
+		str.add(astvis.printassertwholelist());
+		str.add("\n");
+		str.add(astvis.printwholelist());
 		
 		/*
 		IResource irs = ((ICompilationUnit) unit).getCorrespondingResource();
