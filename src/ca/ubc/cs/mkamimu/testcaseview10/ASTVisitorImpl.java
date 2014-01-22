@@ -187,7 +187,13 @@ public class ASTVisitorImpl extends ASTVisitor {
 							&& arglist.get(countflag - 2).contains(node.getExpression().toString())) {
 						tmpflag = true;
 					}
+					
+					if (wholelist.get(countflag - 2).contains(node.toString())) {
+						tmpflag = false;
+					}
+
 				}
+				
 		
 			if (tmpflag) {
 				// test 
@@ -262,6 +268,35 @@ public class ASTVisitorImpl extends ASTVisitor {
 		boolean tmpflag = false;
 		if (countflag > 0) {
 
+			
+			if (countflag == 1) {
+				for(int i = 0; i < node.arguments().size(); i++) {
+					if (assertarglist.contains(node.arguments().get(i).toString())) {
+						tmpflag = true;
+					}
+				}
+				if (node.getExpression() != null 
+						&& assertarglist.contains(node.getExpression().toString())) {
+					tmpflag = true;
+				}
+				
+			} else if (arglist.size() > 0 && arglist.size() > countflag - 2) {
+				for(int i = 0; i < node.arguments().size(); i++) {
+					if (arglist.get(countflag - 2).contains(node.arguments().get(i).toString())) {
+						tmpflag = true;
+					}
+				}
+				if (node.getExpression() != null 
+						&& arglist.get(countflag - 2).contains(node.getExpression().toString())) {
+					tmpflag = true;
+				}
+				
+				if (wholelist.get(countflag - 2).contains(node.toString())) {
+					tmpflag = false;
+				}
+
+			}
+			/*
 			if (countflag == 1) {
 				for(int i = 0; i < node.arguments().size(); i++) {
 					if (assertarglist.contains(node.arguments().get(i).toString())) {
@@ -274,7 +309,7 @@ public class ASTVisitorImpl extends ASTVisitor {
 						tmpflag = true;
 					}
 				}
-			}
+			}*/
 	
 			if (tmpflag) {
 				// test 
