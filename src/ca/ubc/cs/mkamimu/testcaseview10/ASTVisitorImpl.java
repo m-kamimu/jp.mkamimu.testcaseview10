@@ -17,9 +17,9 @@ import org.eclipse.jdt.core.dom.VariableDeclarationFragment;
 
 public class ASTVisitorImpl extends ASTVisitor {
 	
-	CompilationUnit cu;
-	TestInformation localTestInformation = new TestInformation();	
-	TestInformation globalTestInformation = null;
+	//CompilationUnit cu;
+	//TestInformation localTestInformation = new TestInformation();	
+	//TestInformation globalTestInformation = null;
 	
 	private int countflag = 0;
 	
@@ -29,12 +29,14 @@ public class ASTVisitorImpl extends ASTVisitor {
 	
 	
 	ASTVisitorImpl(CompilationUnit cu, TestInformation testinfo) {
+		/*
 		this.cu = cu;
 		this.globalTestInformation = testinfo;
 		if (!this.globalTestInformation.isLock()) {
 			//this.globalTestInformation.setSourceFile(cu.toString());
 		}
 		localTestInformation.setClassName(cu.getJavaElement().getElementName());
+		*/
 		//System.out.println(cu.getJavaElement().getElementName());
 	}
 
@@ -47,11 +49,12 @@ public class ASTVisitorImpl extends ASTVisitor {
 	public boolean visit(TypeDeclaration node) {
 		// TODO Auto-generated method stub
 		currentMethod.push(node.getName().toString());
+		/*
 		if(!globalTestInformation.isLock()) {
 			globalTestInformation.getMethodDList().add(node.getName().toString());
 		}
 		localTestInformation.getMethodDList().add(node.getName().toString());
-
+		 */
 		return super.visit(node);
 	}
 
@@ -76,10 +79,12 @@ public class ASTVisitorImpl extends ASTVisitor {
 	public boolean visit(MethodDeclaration node) {
 		// TODO Auto-generated method stub
 		currentMethod.push(node.getName().toString());
+		/*
 		if(!globalTestInformation.isLock()) {
 			globalTestInformation.getMethodDList().add(node.getName().toString());
 		}
 		localTestInformation.getMethodDList().add(node.getName().toString());
+		*/
 		return super.visit(node);
 	}
 	
@@ -139,57 +144,23 @@ public class ASTVisitorImpl extends ASTVisitor {
 		// TODO Auto-generated method stub
 		if ((assertFlag || node.getName().toString().startsWith("assert")) && countflag == 0) {
 			// test 
-			System.out.println("assertnodeinfo:" + node.toString());
-			System.out.println("assertarg:" + node.arguments().toString());
+			//System.out.println("assertnodeinfo:" + node.toString());
+			//System.out.println("assertarg:" + node.arguments().toString());
 			
 			for(int i = 0; i < node.arguments().size(); i++) {
-				assertarglist.add(node.arguments().get(i).toString());
-			}
-			wholeassertarglist.add(node.toString());
-			
-			System.out.println("assertname: " + node.getName());
-			System.out.println("assertnodep:" + node.getExpression());
-			
-			/*
-			if(!globalTestInformation.isLock()) {
-				globalTestInformation.getMethodADList().add(currentMethod.peek());				
-				globalTestInformation.getMethodAList().add(node.toString());
-				globalTestInformation.getMethodAintsList().add(node.getStartPosition());
-				globalTestInformation.getMethodAintlList().add(node.getLength());
-				globalTestInformation.getMethodOnlyAList().add(node.getName().toString());
-				globalTestInformation.getMethodAArgList().add(node.arguments().toString());
-				globalTestInformation.getTryflag().add(tryflag);
-				globalTestInformation.getCatchflag().add(catchflag);
-				if (node.getExpression() != null) {
-					globalTestInformation.getExprOnlyAList().add(node.getExpression().toString());
-				} else {
-					globalTestInformation.getExprOnlyAList().add("");				
+				if (!node.arguments().get(i).toString().equals("null")) {
+					assertarglist.add(node.arguments().get(i).toString());
 				}
 			}
-			localTestInformation.getMethodADList().add(currentMethod.peek());				
-			localTestInformation.getMethodAList().add(node.toString());
-			localTestInformation.getMethodAintsList().add(node.getStartPosition());
-			localTestInformation.getMethodAintlList().add(node.getLength());
-			localTestInformation.getMethodOnlyAList().add(node.getName().toString());
-			localTestInformation.getMethodAArgList().add(node.arguments().toString());
-			localTestInformation.getTryflag().add(tryflag);
-			localTestInformation.getCatchflag().add(catchflag);
 			if (node.getExpression() != null) {
-				localTestInformation.getExprOnlyAList().add(node.getExpression().toString());
-			} else {
-				localTestInformation.getExprOnlyAList().add("");				
+				assertarglist.add(node.getExpression().toString());
 			}
 
-			/*
-			System.out.println("localap:" + node.getParent().toString());
-			System.out.println("locala:" + node.toString());
-			System.out.println("localaa:" + node.arguments().toString());
-			if (node.getExpression() != null) {
-				System.out.println("localaex:" + node.getExpression().toString());
-			} else {
-				System.out.println("localaex:" + "no expression");
-			}
-			*/
+			wholeassertarglist.add(node.toString());
+			
+			//System.out.println("assertname: " + node.getName());
+			System.out.println("assertnodep:" + node.getExpression());
+			
 			assertFlag = true;
 		} else if (!(assertFlag || node.getName().toString().startsWith("assert"))) {
 			boolean tmpflag = false;
@@ -201,29 +172,44 @@ public class ASTVisitorImpl extends ASTVisitor {
 							tmpflag = true;
 						}
 					}
-				} else if (arglist.size() > 0) {
+					if (node.getExpression() != null 
+							&& assertarglist.contains(node.getExpression().toString())) {
+						tmpflag = true;
+					}
+					
+				} else if (arglist.size() > 0 && arglist.size() > countflag - 2) {
 					for(int i = 0; i < node.arguments().size(); i++) {
 						if (arglist.get(countflag - 2).contains(node.arguments().get(i).toString())) {
 							tmpflag = true;
 						}
 					}
+					if (node.getExpression() != null 
+							&& arglist.get(countflag - 2).contains(node.getExpression().toString())) {
+						tmpflag = true;
+					}
 				}
 		
 			if (tmpflag) {
 				// test 
-				System.out.println("othernodeinfo:" + node.toString());
-				System.out.println("otherarg:" + node.arguments().toString());
-				System.out.println("othername: " + node.getName());
-				System.out.println("othernodep:" + node.getExpression());
+				//System.out.println("othernodeinfo:" + node.toString());
+				//System.out.println("otherarg:" + node.arguments().toString());
+				//System.out.println("othername: " + node.getName());
+				//System.out.println("othernodep:" + node.getExpression());
 				
 				List<String> arglistcount = new ArrayList();
 				List<String> wholelistcount = new ArrayList();
 				for(int i = 0; i < node.arguments().size(); i++) {
-					arglistcount.add(node.arguments().get(i).toString());
+					if (!node.arguments().get(i).toString().equals("null")) {
+						arglistcount.add(node.arguments().get(i).toString());
+					}
 				}
+				if (node.getExpression() != null) {
+					arglistcount.add(node.getExpression().toString());
+				}
+
 				wholelistcount.add(node.toString());
 				
-				if (arglist.size() > countflag - 1) {
+				if (arglist.size() > countflag) {
 					List<String> tmparglistcount = arglist.get(countflag - 1);
 					tmparglistcount.addAll(arglistcount);
 					arglist.set(countflag - 1, tmparglistcount);
@@ -241,47 +227,6 @@ public class ASTVisitorImpl extends ASTVisitor {
 				
 			}
 			}
-			/*
-			if(!globalTestInformation.isLock()) {
-				globalTestInformation.getMethodIDList().add(currentMethod.peek());				
-				globalTestInformation.getMethodIList().add(node.toString());
-				globalTestInformation.getMethodIintsList().add(node.getStartPosition());
-				globalTestInformation.getMethodIintlList().add(node.getLength());
-				globalTestInformation.getMethodOnlyIList().add(node.getName().toString());
-				globalTestInformation.getMethodIArgList().add(node.arguments().toString());
-				globalTestInformation.getTryflag().add(tryflag);
-				globalTestInformation.getCatchflag().add(catchflag);
-				if (node.getExpression() != null) {
-					globalTestInformation.getExprOnlyIList().add(node.getExpression().toString());
-				} else {
-					globalTestInformation.getExprOnlyIList().add("");				
-				}
-			}
-			localTestInformation.getMethodIDList().add(currentMethod.peek());				
-			localTestInformation.getMethodIList().add(node.toString());			
-			localTestInformation.getMethodIintsList().add(node.getStartPosition());
-			localTestInformation.getMethodIintlList().add(node.getLength());
-			localTestInformation.getMethodOnlyIList().add(node.getName().toString());
-			localTestInformation.getMethodIArgList().add(node.arguments().toString());
-			localTestInformation.getTryflag().add(tryflag);
-			localTestInformation.getCatchflag().add(catchflag);
-			if (node.getExpression() != null) {
-				localTestInformation.getExprOnlyIList().add(node.getExpression().toString());
-			} else {
-				localTestInformation.getExprOnlyIList().add("");				
-			}
-
-			/*
-			System.out.println("localip:" + node.getParent().toString());
-			System.out.println("locali:" + node.toString());
-			System.out.println("localia:" + node.arguments().toString());
-			if (node.getExpression() != null) {
-				System.out.println("localiex:" + node.getExpression().toString());
-			} else {
-				System.out.println("localiex:" + "no expression");
-			}
-			*/
-
 		}
 		
 		return super.visit(node);
@@ -323,7 +268,7 @@ public class ASTVisitorImpl extends ASTVisitor {
 						tmpflag = true;
 					}
 				}
-			} else if (arglist.size() > 0) {
+			} else if (arglist.size() > 0 && arglist.size() > countflag - 2) {
 				for(int i = 0; i < node.arguments().size(); i++) {
 					if (arglist.get(countflag - 2).contains(node.arguments().get(i).toString())) {
 						tmpflag = true;
@@ -334,21 +279,24 @@ public class ASTVisitorImpl extends ASTVisitor {
 			if (tmpflag) {
 				// test 
 			// test 
-			System.out.println("cothernodeinfo:" + node.toString());
-			System.out.println("cotherarg:" + node.arguments().toString());
+			//System.out.println("cothernodeinfo:" + node.toString());
+			//System.out.println("cotherarg:" + node.arguments().toString());
 			//System.out.println("cothername: " + node.getName());
-			System.out.println("cothernodep:" + node.getExpression());
+			//System.out.println("cothernodep:" + node.getExpression());
 	
 			List<String> arglistcount = new ArrayList();
 			List<String> wholelistcount = new ArrayList();
 
 			for(int i = 0; i < node.arguments().size(); i++) {
-				arglistcount.add(node.arguments().get(i).toString());
+				if (!node.arguments().get(i).toString().equals("null")) {
+					arglistcount.add(node.arguments().get(i).toString());
+				}
+				//arglistcount.add(node.arguments().get(i).toString());
 				//arglistcount.add(node.getExpression().toString());			
 			}
 			wholelistcount.add(node.toString());
 			
-			if (arglist.size() > countflag - 1) {
+			if (arglist.size() > countflag) {
 				List<String> tmparglistcount = arglist.get(countflag - 1);
 				tmparglistcount.addAll(arglistcount);
 				arglist.set(countflag - 1, tmparglistcount);
@@ -366,37 +314,6 @@ public class ASTVisitorImpl extends ASTVisitor {
 		}
 		}
 		
-		/*
-		// TODO Auto-generated method stub
-		if(!globalTestInformation.isLock()) {
-			globalTestInformation.getMethodIDList().add(currentMethod.peek());				
-			globalTestInformation.getMethodIList().add(node.toString());
-			globalTestInformation.getMethodIintsList().add(node.getStartPosition());
-			globalTestInformation.getMethodIintlList().add(node.getLength());
-			globalTestInformation.getMethodOnlyIList().add(node.getType().toString());
-			globalTestInformation.getMethodIArgList().add(node.arguments().toString());
-			globalTestInformation.getTryflag().add(tryflag);
-			globalTestInformation.getCatchflag().add(catchflag);
-			if (node.getExpression() != null) {
-				globalTestInformation.getExprOnlyIList().add(node.getExpression().toString());
-			} else {
-				globalTestInformation.getExprOnlyIList().add("");				
-			}
-		}
-		localTestInformation.getMethodIDList().add(currentMethod.peek());
-		localTestInformation.getMethodIList().add(node.toString());			
-		localTestInformation.getMethodIintsList().add(node.getStartPosition());
-		localTestInformation.getMethodIintlList().add(node.getLength());
-		localTestInformation.getMethodOnlyIList().add(node.getType().toString());
-		localTestInformation.getMethodIArgList().add(node.arguments().toString());
-		localTestInformation.getTryflag().add(tryflag);
-		localTestInformation.getCatchflag().add(catchflag);
-		if (node.getExpression() != null) {
-			localTestInformation.getExprOnlyIList().add(node.getExpression().toString());
-		} else {
-			localTestInformation.getExprOnlyIList().add("");				
-		}
-		*/
 		return super.visit(node);
 	}
 	
@@ -408,9 +325,9 @@ public class ASTVisitorImpl extends ASTVisitor {
 	 */
 	public boolean visit(VariableDeclarationFragment node) {
 		// test 
-		System.out.println("dothernodeinfo:" + node.toString());
+		//System.out.println("dothernodeinfo:" + node.toString());
 		//System.out.println("dotherarg:" + node.arguments().toString());
-		System.out.println("dothername: " + node.getName());
+		//System.out.println("dothername: " + node.getName());
 		//System.out.println("dothernodep:" + node.getExpression());
 
 		
@@ -422,7 +339,7 @@ public class ASTVisitorImpl extends ASTVisitor {
 					node.getName().toString(), node.getInitializer().toString(),
 					node.getStartPosition(), node.getLength()
 					);
-			this.localTestInformation.addAssigninfo(asninfo);
+			//this.localTestInformation.addAssigninfo(asninfo);
 
 			/*
 			System.out.print(this.currentMethod.peek() + ":");
@@ -448,7 +365,7 @@ public class ASTVisitorImpl extends ASTVisitor {
 	public boolean visit(Assignment node) {
 		
 		// test 
-		System.out.println("asothernodeinfo:" + node.toString());
+		//System.out.println("asothernodeinfo:" + node.toString());
 		//System.out.println("dotherarg:" + node.arguments().toString());
 		//System.out.println("dothername: " + node.getName());
 		//System.out.println("dothernodep:" + node.getExpression());
@@ -463,7 +380,7 @@ public class ASTVisitorImpl extends ASTVisitor {
 					node.getLeftHandSide().toString(), node.getRightHandSide().toString(),
 					node.getStartPosition(), node.getLength()
 					);
-			this.localTestInformation.addAssigninfo(asninfo);
+			//this.localTestInformation.addAssigninfo(asninfo);
 			
 			/*
 			System.out.print(this.currentMethod.peek() + ":");

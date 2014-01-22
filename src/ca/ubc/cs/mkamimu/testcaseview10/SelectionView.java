@@ -264,15 +264,29 @@ public class SelectionView extends ViewPart {
 		
 		CompilationUnit unitp = (CompilationUnit)parser.createAST(new NullProgressMonitor());
 		
+		System.out.println("Start");
 		ASTVisitorImpl astvis = new ASTVisitorImpl(unitp, this.globalTestInformation);
+		// for assert
 		unitp.accept(astvis);
+		
+		// first arg
 		astvis.countup();
-		
 		unitp.accept(astvis);
-		
+		// second arg
 		astvis.countup();
-		
 		unitp.accept(astvis);
+		// third arg
+		astvis.countup();
+		unitp.accept(astvis);
+
+		// fourth arg
+		astvis.countup();
+		unitp.accept(astvis);
+
+		// fifth arg
+		astvis.countup();
+		unitp.accept(astvis);
+
 		
 		astvis.printassertarglist();
 		astvis.printarglist();
