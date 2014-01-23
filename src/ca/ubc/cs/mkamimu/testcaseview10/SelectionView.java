@@ -257,7 +257,7 @@ public class SelectionView extends ViewPart {
 		CompilationUnit unitp = (CompilationUnit)parser.createAST(new NullProgressMonitor());
 		
 		System.out.println("Start");
-		ASTVisitorImpl astvis = new ASTVisitorImpl(unitp, this.globalTestInformation);
+		ASTVisitorImpl astvis = new ASTVisitorImpl(unitp);
 		// for assert
 		unitp.accept(astvis);
 		
@@ -353,7 +353,7 @@ public class SelectionView extends ViewPart {
 	}
 	
 	private String currentProject = null;
-	private TestInformation globalTestInformation = new TestInformation();
+	//private TestInformation globalTestInformation = new TestInformation();
 
 	/*
 	private TestInformation getAllMethodICompliationUnitInfo(IJavaProject javaProject)

@@ -30,7 +30,7 @@ public class ASTVisitorImpl extends ASTVisitor {
 		countflag++;
 	}
 	
-	ASTVisitorImpl(CompilationUnit cu, TestInformation testinfo) {
+	ASTVisitorImpl(CompilationUnit cu) {
 		
 		this.cu = cu;
 		/*
