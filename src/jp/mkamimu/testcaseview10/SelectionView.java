@@ -1,5 +1,7 @@
 package jp.mkamimu.testcaseview10;
 
+import java.io.BufferedReader;
+import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -245,7 +247,7 @@ public class SelectionView extends ViewPart {
 	public String getOneMethodICompilationUnitInfo(ICompilationUnit unit) 
 			throws JavaModelException {
 		//getAllMethodICompliationUnitInfo(unit.getJavaProject());
-		List<String> str = new ArrayList<String>();	
+		StringBuffer str = new StringBuffer();	
 
 		// assert statement search
 		ASTParser parser = ASTParser.newParser(AST.JLS4);
@@ -263,7 +265,7 @@ public class SelectionView extends ViewPart {
 		for (int j = 0; j < methodlist.size(); j++) {
 			ASTVisitorImpl astvis = new ASTVisitorImpl(unitp);
 			String methodname = methodlist.get(j);
-			str.add(methodname + "\n");
+			str.append(methodname + "\n");
 			System.out.println(methodname + "\n");
 			
 			astvis.setCurrentMethod(methodname);
@@ -281,15 +283,35 @@ public class SelectionView extends ViewPart {
 			astvis.printassertarglist();
 			astvis.printarglist();
 	
-			str.add(astvis.printassertwholelist());
-			str.add("\n");
-			str.add(astvis.printwholelist());
+			//str.add(astvis.printassertwholelist());
+			//str.add("\n");
+			//str.add(astvis.printwholelist());
 			linelistall = astvis.getHashMap();
 		}
 		
 		for(Integer keys : linelistall.keySet()) {
 			System.out.println(keys +":"+ linelistall.get(keys));
 		}
+		
+		try {
+			BufferedReader reader = new BufferedReader(new StringReader(unit.getSource()));
+			int l = 1;
+			String line;
+			while((line = reader.readLine()) != null) {
+				Integer linenum = linelistall.get(l);
+				if (linenum == null) {
+					System.out.println(":		"+line);
+					str.append(":		"+line+"\n");
+				} else {
+					System.out.println(linelistall.get(l) + ":		"+line);
+					str.append(linelistall.get(l) + ":		"+line+"\n");
+				}
+				l++;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+			
 		
 		return str.toString();
 	}
