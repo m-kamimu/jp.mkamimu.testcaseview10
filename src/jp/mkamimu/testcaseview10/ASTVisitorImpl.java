@@ -4,19 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
 
-import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.ASTVisitor;
-import org.eclipse.jdt.core.dom.Assignment;
-import org.eclipse.jdt.core.dom.CatchClause;
-import org.eclipse.jdt.core.dom.ClassInstanceCreation;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.MethodInvocation;
 import org.eclipse.jdt.core.dom.SimpleName;
-import org.eclipse.jdt.core.dom.StructuralPropertyDescriptor;
-import org.eclipse.jdt.core.dom.TryStatement;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
-import org.eclipse.jdt.core.dom.VariableDeclarationFragment;
 
 public class ASTVisitorImpl extends ASTVisitor {
 	
@@ -80,13 +73,13 @@ public class ASTVisitorImpl extends ASTVisitor {
 		super.endVisit(node);
 	}
 	
-	List<List<Integer>> linelist = new ArrayList();
+	List<List<Integer>> linelist = new ArrayList<List<Integer>>();
 	
-	List<List<String>> arglist = new ArrayList();
-	List<String> assertarglist = new ArrayList();
+	List<List<String>> arglist = new ArrayList<List<String>>();
+	List<String> assertarglist = new ArrayList<String>();
 	
-	List<List<String>> wholelist = new ArrayList();
-	List<String> wholeassertarglist = new ArrayList();
+	List<List<String>> wholelist = new ArrayList<List<String>>();
+	List<String> wholeassertarglist = new ArrayList<String>();
 
 	
 	public String printassertarglist() {
@@ -139,8 +132,8 @@ public class ASTVisitorImpl extends ASTVisitor {
 	
 	public boolean visit(SimpleName node) {
 		boolean tmpflag = false; 
-		System.out.println("Simple:" + node.toString());
-		System.out.println("SimpleParent:" + node.getParent().toString());
+		//System.out.println("Simple:" + node.toString());
+		//System.out.println("SimpleParent:" + node.getParent().toString());
 		
 		
 		if (countflag > 0) {
@@ -184,9 +177,9 @@ public class ASTVisitorImpl extends ASTVisitor {
 	
 			if (sntmpflag > 0) {
 
-			List<Integer> linelistcount = new ArrayList();
-			List<String> arglistcount = new ArrayList();
-			List<String> wholelistcount = new ArrayList();
+			List<Integer> linelistcount = new ArrayList<Integer>();
+			List<String> arglistcount = new ArrayList<String>();
+			List<String> wholelistcount = new ArrayList<String>();
 
 				if (!node.toString().equals("null")) {
 					arglistcount.add(node.toString());
@@ -269,100 +262,6 @@ public class ASTVisitorImpl extends ASTVisitor {
 			assertFlag = false;
 		}
 		super.endVisit(node);
-	}
-
-	/* (non-Javadoc)
-	 * @see org.eclipse.jdt.core.dom.ASTVisitor#endVisit(org.eclipse.jdt.core.dom.ClassInstanceCreation)
-	 */
-	@Override
-	public void endVisit(ClassInstanceCreation node) {
-		// TODO Auto-generated method stub
-		super.endVisit(node);
-	}
-
-	
-	/* (non-Javadoc)
-	 * @see org.eclipse.jdt.core.dom.ASTVisitor#visit(org.eclipse.jdt.core.dom.ClassInstanceCreation)
-	 */
-	@Override
-	public boolean visit(ClassInstanceCreation node) {
-		return super.visit(node);
-	}
-	
-	
-	private boolean variableDeclarationFragFlag = false;
-	private boolean isAssignFlag = true;
-	/* (non-Javadoc)
-	 * @see org.eclipse.jdt.core.dom.ASTVisitor#visit(org.eclipse.jdt.core.dom.VariableDeclarationFragment)
-	 */
-	public boolean visit(VariableDeclarationFragment node) {
-		variableDeclarationFragFlag = true;
-		return super.visit(node);
-	}
-	/* (non-Javadoc)
-	 * @see org.eclipse.jdt.core.dom.ASTVisitor#endVisit(org.eclipse.jdt.core.dom.VariableDeclarationFragment)
-	 */
-	public void endVisit(VariableDeclarationFragment node) {
-		variableDeclarationFragFlag = false;
-	}
-	
-	
-	/* (non-Javadoc)
-	 * @see org.eclipse.jdt.core.dom.ASTVisitor#visit(org.eclipse.jdt.core.dom.Assignment)
-	 */
-	public boolean visit(Assignment node) {
-		return super.visit(node);
-	}
-	
-	/* (non-Javadoc)
-	 * @see org.eclipse.jdt.core.dom.ASTVisitor#endVisit(org.eclipse.jdt.core.dom.Assignment)
-	 */
-	public void endVisit(Assignment node) {
-		isAssignFlag = false;
-	}
-	
-	private boolean tryflag = false;
-	private boolean catchflag = false;
-	/* (non-Javadoc)
-	 * @see org.eclipse.jdt.core.dom.ASTVisitor#visit(org.eclipse.jdt.core.dom.TryStatement)
-	 */
-	public boolean visit(TryStatement node) {
-		tryflag = true;
-		return super.visit(node);
-	}
-	/* (non-Javadoc)
-	 * @see org.eclipse.jdt.core.dom.ASTVisitor#endVisit(org.eclipse.jdt.core.dom.TryStatement)
-	 */
-	public void endVisit(TryStatement node) {
-		tryflag = false;
-	}
-	
-	/* (non-Javadoc)
-	 * @see org.eclipse.jdt.core.dom.ASTVisitor#visit(org.eclipse.jdt.core.dom.CatchClause)
-	 */
-	public boolean visit(CatchClause node) {
-		catchflag = true;
-		return super.visit(node);
-	}
-	/* (non-Javadoc)
-	 * @see org.eclipse.jdt.core.dom.ASTVisitor#endVisit(org.eclipse.jdt.core.dom.CatchClause)
-	 */
-	public void endVisit(CatchClause node) {
-		catchflag = false;
-	}
-
-	/**
-	 * @return
-	 */
-	public boolean isTryflag() {
-		return tryflag;
-	}
-
-	/**
-	 * @return
-	 */
-	public boolean isCatchflag() {
-		return catchflag;
 	}
 	
 	

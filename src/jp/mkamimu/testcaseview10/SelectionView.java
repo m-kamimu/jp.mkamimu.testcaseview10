@@ -3,9 +3,7 @@ package jp.mkamimu.testcaseview10;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.NullProgressMonitor;
@@ -18,6 +16,7 @@ import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTParser;
 import org.eclipse.jdt.core.dom.CompilationUnit;
+import org.eclipse.jdt.core.dom.TypeDeclaration;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.Document;
 import org.eclipse.jface.text.IMarkSelection;
@@ -29,11 +28,8 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.ISelectionListener;
-import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
-import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.model.WorkbenchLabelProvider;
 import org.eclipse.ui.part.PageBook;
 import org.eclipse.ui.part.ViewPart;
@@ -87,7 +83,7 @@ public class SelectionView extends ViewPart {
 					
 					project = adaptable.getAdapter(ICompilationUnit.class);								
 					if (project instanceof ICompilationUnit) {
-						showText(getOneMethodICompilationUnitInfo((ICompilationUnit)project, false));
+						showText(getOneMethodICompilationUnitInfo((ICompilationUnit)project));
 						showitemcalled = true;
 					}
 					//project = adaptable.getAdapter(IClass)
@@ -245,7 +241,7 @@ public class SelectionView extends ViewPart {
 	}
 	
 	
-	public String getOneMethodICompilationUnitInfo(ICompilationUnit unit, boolean loglikelihood) 
+	public String getOneMethodICompilationUnitInfo(ICompilationUnit unit) 
 			throws JavaModelException {
 		//getAllMethodICompliationUnitInfo(unit.getJavaProject());
 		List<String> str = new ArrayList<String>();	
@@ -258,144 +254,34 @@ public class SelectionView extends ViewPart {
 		
 		System.out.println("Start");
 		ASTVisitorImpl astvis = new ASTVisitorImpl(unitp);
-		// for assert
-		unitp.accept(astvis);
-		
-		// first arg
-		for (int i = 0; i < 15; i++) {
-		astvis.countup();
-		unitp.accept(astvis);
-		}
-		
-		astvis.printassertarglist();
-		astvis.printarglist();
 
-		str.add(astvis.printassertwholelist());
-		str.add("\n");
-		str.add(astvis.printwholelist());
+		List<TypeDeclaration> typeinfo = unitp.types();
 		
-		/*
-		IResource irs = ((ICompilationUnit) unit).getCorrespondingResource();
-		a1[0] = SampleMarker.createMarker(irs, astvis.localTestInformation, globalTestInformation);
-		a1[1] = SampleMarker10.createMarker(irs, astvis.localTestInformation, globalTestInformation);
-		a1[2] = SampleMarker2.createMarker(irs, astvis.localTestInformation, globalTestInformation);
-		a1[3] = SampleMarker20.createMarker(irs, astvis.localTestInformation, globalTestInformation);
-		
-		//str.add(SampleMarker.getLastm());  //assertinfo?
-		//str.add(SampleMarker2.getLastm()); // normal method info?
-		
-		DescriptionDataHolder assertstr = SampleMarker.getLastm2();
-		DescriptionDataHolder invostr = SampleMarker2.getLastm2();
-		
-		List<String> testname = assertstr.getTestName(astvis.localTestInformation.getClassName());
-		List<String> testname2 = invostr.getTestName(astvis.localTestInformation.getClassName());
-		
-		for(int i = 0; i < testname.size(); i++) {
-			String testnameelm = testname.get(i);
-			if (!testname2.contains(testnameelm)) {
-				testname2.add(testnameelm);
-			}
-		}
-		
-		str.add(astvis.localTestInformation.getClassName() + "\n");
-		
-		
-		for(int i = 0; i < testname2.size(); i++) {
-			DescriptionDataForWriting description1 = new DescriptionDataForWriting();
-			DescriptionDataForWriting description2 = new DescriptionDataForWriting();
-			StringBuffer strbuf = new StringBuffer();
-			strbuf.append(testname2.get(i) + "\t:\t");
-			for(int j = 0; j < 2; j++) {
-				description1.add(assertstr.getNextItem(testname2.get(i)));
-				description2.add(invostr.getNextItem(testname2.get(i)));
-				//strbuf.append(testname2.get(i) + "\t:\t");
+		for (int j = 0; j < typeinfo.size(); j++) {
+			TypeDeclaration tp = typeinfo.get(j);
+			str.add(tp.getName().toString() + "\n");
+			
+			// for assert
+			tp.accept(astvis);
+			
+			// first arg
+			for (int i = 0; i < 15; i++) {
+			astvis.countup();
+			tp.accept(astvis);
 			}
 			
-			List<DescriptionData> deslist1 = description1.getDescriptionInOrder();
-			List<DescriptionData> deslist2 = description2.getDescriptionInOrder();
-
-			int d1count = 0;
-			int d2count = 0;
-			while (d1count < deslist1.size() || d2count < deslist2.size()) {
-				DescriptionData d1 = null;
-				DescriptionData d2 = null;
-				if (d1count < deslist1.size()) {
-					d1 = deslist1.get(d1count);
-				}
-				if (d2count < deslist2.size()) {
-					d2 = deslist2.get(d2count);
-				}
-				
-				if (d1 != null && d2 != null) {
-					if (d1.getStartcolumn() < d2.getStartcolumn()) {
-						//strbuf.append(", " + d1.getDescription());
-						strbuf.append(", " + d1.getDescriptionWithReplace());
-						d1count++;
-					} else {
-						//strbuf.append(", " + d2.getDescription());
-						strbuf.append(", " + d2.getDescriptionWithReplace());
-						d2count++;
-					}
-				} else if (d1 == null) {
-					strbuf.append(", " + d2.getDescriptionWithReplace());
-					d2count++;
-				} else if (d2 == null) {
-					strbuf.append(", " + d1.getDescriptionWithReplace());
-					d1count++;
-				}
-			}
-			str.add(strbuf.toString() + "\n");
-			strbuf.delete(0, strbuf.length());
+			astvis.printassertarglist();
+			astvis.printarglist();
+	
+			str.add(astvis.printassertwholelist());
+			str.add("\n");
+			str.add(astvis.printwholelist());
 		}
-		//str.add(SampleMarker2.getLastm2()); // normal method info?
-		*/
+		
 		return str.toString();
 	}
 	
 	private String currentProject = null;
-	//private TestInformation globalTestInformation = new TestInformation();
-
-	/*
-	private TestInformation getAllMethodICompliationUnitInfo(IJavaProject javaProject)
-			throws JavaModelException {
-		if (currentProject != null && currentProject.equals(javaProject.getElementName())) {
-			return this.globalTestInformation;
-		} else {
-			currentProject = javaProject.getElementName();
-			this.globalTestInformation.setLock(false);
-			this.globalTestInformation.getMethodDList().clear();
-			this.globalTestInformation.getMethodIList().clear();
-			this.globalTestInformation.getMethodAList().clear();
-			this.globalTestInformation.getMethodOnlyIList().clear();
-			this.globalTestInformation.getMethodOnlyAList().clear();
-			this.globalTestInformation.getMethodAArgList().clear();
-			this.globalTestInformation.getMethodIArgList().clear();
-			//this.globalTestInformation.getSourceFiles().clear();
-		}
-		
-		IPackageFragment[] packages = javaProject.getPackageFragments();
-		for (IPackageFragment mypackage : packages) {
-			// Package fragments include all packages in the
-			// classpath
-			// We will only look at the package from the source
-			// folder
-			// K_BINARY would include also included JARS, e.g.
-			// rt.jar
-			//System.out.println("--------------------------------------------------------------------");
-			if (mypackage.getKind() == IPackageFragmentRoot.K_SOURCE) {
-				for (ICompilationUnit unit : mypackage.getCompilationUnits()) {
-					// assert statement search
-					ASTParser parser = ASTParser.newParser(AST.JLS4);
-					parser.setSource(unit);
-					CompilationUnit unitp = (CompilationUnit)parser.createAST(new NullProgressMonitor());
-					ASTVisitorImpl astvis = new ASTVisitorImpl(unitp, this.globalTestInformation);
-					unitp.accept(astvis);
-				}
-			}
-		}
-		this.globalTestInformation.setLock(true);
-		return this.globalTestInformation;
-	}
 
 	/**
 	 * @param currentProject the currentProject to set
