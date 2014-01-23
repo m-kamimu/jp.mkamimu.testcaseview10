@@ -14,6 +14,7 @@ import org.eclipse.jdt.core.dom.TypeDeclaration;
 public class ASTVisitorImpl extends ASTVisitor {
 	
 	CompilationUnit cu;
+	String currentMethodName = null;
 	
 	private int countflag = 0;
 	
@@ -24,6 +25,11 @@ public class ASTVisitorImpl extends ASTVisitor {
 	ASTVisitorImpl(CompilationUnit cu) {
 		this.cu = cu;
 	}
+	
+	public void setCurrentMethod(String currentMethodName) {
+		this.currentMethodName = currentMethodName;
+	}
+	
 
 	Stack<String> currentMethod = new Stack<String>();
 	
@@ -33,7 +39,7 @@ public class ASTVisitorImpl extends ASTVisitor {
 	@Override
 	public boolean visit(TypeDeclaration node) {
 		// TODO Auto-generated method stub
-		currentMethod.push(node.getName().toString());
+		//currentMethod.push(node.getName().toString());
 		return super.visit(node);
 	}
 
@@ -43,9 +49,9 @@ public class ASTVisitorImpl extends ASTVisitor {
 	@Override
 	public void endVisit(TypeDeclaration node) {
 		// TODO Auto-generated method stub
-		if (node.getName().equals(currentMethod.peek())) {
+		/*if (node.getName().equals(currentMethod.peek())) {
 			currentMethod.pop();
-		}
+		}*/
 
 		super.endVisit(node);
 	}
@@ -131,6 +137,10 @@ public class ASTVisitorImpl extends ASTVisitor {
 	private int sntmpflag = 0;
 	
 	public boolean visit(SimpleName node) {
+		if (currentMethod.isEmpty() || !currentMethod.peek().equals(currentMethodName)) {
+			return super.visit(node);
+		}
+		
 		boolean tmpflag = false; 
 		//System.out.println("Simple:" + node.toString());
 		//System.out.println("SimpleParent:" + node.getParent().toString());
@@ -227,6 +237,10 @@ public class ASTVisitorImpl extends ASTVisitor {
 	 */
 	@Override
 	public boolean visit(MethodInvocation node) {
+		if (currentMethod.isEmpty() || !currentMethod.peek().equals(currentMethodName)) {
+			return super.visit(node);
+		}
+		
 		// TODO Auto-generated method stub
 		if ((assertFlag || node.getName().toString().startsWith("assert")) && countflag == 0) {
 			

@@ -253,21 +253,27 @@ public class SelectionView extends ViewPart {
 		CompilationUnit unitp = (CompilationUnit)parser.createAST(new NullProgressMonitor());
 		
 		System.out.println("Start");
-		ASTVisitorImpl astvis = new ASTVisitorImpl(unitp);
+		ASTMethodDeclarationVisitorImpl astmvis = new ASTMethodDeclarationVisitorImpl();
+		unitp.accept(astmvis);
+		List<String> methodlist = astmvis.getMethodDeclarationList();
 
-		List<TypeDeclaration> typeinfo = unitp.types();
+		//List<TypeDeclaration> typeinfo = unitp.types();
 		
-		for (int j = 0; j < typeinfo.size(); j++) {
-			TypeDeclaration tp = typeinfo.get(j);
-			str.add(tp.getName().toString() + "\n");
+		for (int j = 0; j < methodlist.size(); j++) {
+			ASTVisitorImpl astvis = new ASTVisitorImpl(unitp);
+			String methodname = methodlist.get(j);
+			//TypeDeclaration tp = typeinfo.get(j);
+			str.add(methodname + "\n");
+			System.out.println(methodname + "\n");
 			
+			astvis.setCurrentMethod(methodname);
 			// for assert
-			tp.accept(astvis);
+			unitp.accept(astvis);
 			
 			// first arg
 			for (int i = 0; i < 15; i++) {
 			astvis.countup();
-			tp.accept(astvis);
+			unitp.accept(astvis);
 			}
 			
 			astvis.printassertarglist();
