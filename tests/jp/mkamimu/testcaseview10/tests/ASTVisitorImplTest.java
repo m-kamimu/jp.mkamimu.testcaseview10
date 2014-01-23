@@ -1,4 +1,4 @@
-package ca.ubc.cs.mkamimu.testcaseview10;
+package jp.mkamimu.testcaseview10.tests;
 
 import static org.junit.Assert.*;
 

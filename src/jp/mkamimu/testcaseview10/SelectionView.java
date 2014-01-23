@@ -1,4 +1,4 @@
-package ca.ubc.cs.mkamimu.testcaseview10;
+package jp.mkamimu.testcaseview10;
 
 import java.util.ArrayList;
 import java.util.List;

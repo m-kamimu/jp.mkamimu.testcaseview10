@@ -1,7 +1,7 @@
 /**
  * 
  */
-package ca.ubc.cs.mkamimu.testcaseview10;
+package jp.mkamimu.testcaseview10.tests;
 
 import static org.junit.Assert.*;
 
@@ -46,7 +46,7 @@ public class ActivatorTest {
 	}
 
 	/**
-	 * Test method for {@link ca.ubc.cs.mkamimu.testcaseview10.Activator#Activator()}.
+	 * Test method for {@link jp.mkamimu.testcaseview10.Activator#Activator()}.
 	 */
 	@Test
 	public void testActivator() {
@@ -54,7 +54,7 @@ public class ActivatorTest {
 	}
 
 	/**
-	 * Test method for {@link ca.ubc.cs.mkamimu.testcaseview10.Activator#start(org.osgi.framework.BundleContext)}.
+	 * Test method for {@link jp.mkamimu.testcaseview10.Activator#start(org.osgi.framework.BundleContext)}.
 	 */
 	@Test
 	public void testStartBundleContext() {
@@ -62,7 +62,7 @@ public class ActivatorTest {
 	}
 
 	/**
-	 * Test method for {@link ca.ubc.cs.mkamimu.testcaseview10.Activator#stop(org.osgi.framework.BundleContext)}.
+	 * Test method for {@link jp.mkamimu.testcaseview10.Activator#stop(org.osgi.framework.BundleContext)}.
 	 */
 	@Test
 	public void testStopBundleContext() {
@@ -70,7 +70,7 @@ public class ActivatorTest {
 	}
 
 	/**
-	 * Test method for {@link ca.ubc.cs.mkamimu.testcaseview10.Activator#getDefault()}.
+	 * Test method for {@link jp.mkamimu.testcaseview10.Activator#getDefault()}.
 	 */
 	@Test
 	public void testGetDefault() {

@@ -1,4 +1,6 @@
-package ca.ubc.cs.mkamimu.testcaseview10.decorator;
+package jp.mkamimu.testcaseview10.decorator;
+
+import jp.mkamimu.testcaseview10.SelectionView;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
@@ -11,7 +13,6 @@ import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.RGB;
 import org.eclipse.ui.PlatformUI;
 
-import ca.ubc.cs.mkamimu.testcaseview10.SelectionView;
 
 
 public class Decorator implements ILightweightLabelDecorator{

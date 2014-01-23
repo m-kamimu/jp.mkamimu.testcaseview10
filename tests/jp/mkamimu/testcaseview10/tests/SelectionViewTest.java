@@ -1,6 +1,7 @@
-package ca.ubc.cs.mkamimu.testcaseview10;
+package jp.mkamimu.testcaseview10.tests;
 
 import static org.junit.Assert.*;
+import jp.mkamimu.testcaseview10.SelectionView;
 
 import org.junit.After;
 import org.junit.AfterClass;
@@ -8,7 +9,6 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import ca.ubc.cs.mkamimu.testcaseview10.SelectionView;
 
 public class SelectionViewTest {
 

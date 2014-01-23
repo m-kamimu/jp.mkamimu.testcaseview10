@@ -5,13 +5,13 @@
          point="org.eclipse.ui.views">
       <category
             name="Sample Category"
-            id="ca.ubc.cs.mkamimu.testcaseview10">
+            id="jp.mkamimu.testcaseview10">
       </category>
       <view
             icon=""
-            category="ca.ubc.cs.mkamimu.testcaseview10"
-            class="ca.ubc.cs.mkamimu.testcaseview10.SelectionView"
-            id="ca.ubc.cs.mkamimu.testcaseview10.SelectionView"
+            category="jp.mkamimu.testcaseview10"
+            class="jp.mkamimu.testcaseview10.SelectionView"
+            id="jp.mkamimu.testcaseview10.SelectionView"
             name="Workbench Selection">
       </view>
    </extension>
@@ -22,10 +22,10 @@
       </perspectiveExtension>
    </extension>
   <extension point="org.eclipse.ui.decorators">  
-	<decorator id="ca.ubc.cs.mkamimu.testcaseview10.decorator.Decorator"   
+	<decorator id="jp.mkamimu.testcaseview10.decorator.Decorator"   
 			label="MyMarker Decorator"
 			state="true"
-			class= "ca.ubc.cs.mkamimu.testcaseview10.decorator.Decorator"   
+			class= "jp.mkamimu.testcaseview10.decorator.Decorator"   
 			adaptable="true"   
 			lightweight="true">   
 		<enablement>
