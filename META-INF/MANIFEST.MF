@@ -16,5 +16,4 @@ Require-Bundle: org.eclipse.ui,
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ActivationPolicy: lazy
 Export-Package: ca.ubc.cs.mkamimu.testcaseview10,
- ca.ubc.cs.mkamimu.testcaseview10.decorator,
- ca.ubc.cs.mkamimu.testcaseview10.marker
+ ca.ubc.cs.mkamimu.testcaseview10.decorator

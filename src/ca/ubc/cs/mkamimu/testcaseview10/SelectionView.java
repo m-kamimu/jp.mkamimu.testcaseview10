@@ -38,14 +38,6 @@ import org.eclipse.ui.model.WorkbenchLabelProvider;
 import org.eclipse.ui.part.PageBook;
 import org.eclipse.ui.part.ViewPart;
 
-import ca.ubc.cs.mkamimu.testcaseview10.marker.DescriptionData;
-import ca.ubc.cs.mkamimu.testcaseview10.marker.DescriptionDataForWriting;
-import ca.ubc.cs.mkamimu.testcaseview10.marker.DescriptionDataHolder;
-import ca.ubc.cs.mkamimu.testcaseview10.marker.SampleMarker;
-import ca.ubc.cs.mkamimu.testcaseview10.marker.SampleMarker10;
-import ca.ubc.cs.mkamimu.testcaseview10.marker.SampleMarker2;
-import ca.ubc.cs.mkamimu.testcaseview10.marker.SampleMarker20;
-
 /**
  * This view simply mirrors the current selection in the workbench window.
  * It works for both, element and text selection.
@@ -270,27 +262,10 @@ public class SelectionView extends ViewPart {
 		unitp.accept(astvis);
 		
 		// first arg
+		for (int i = 0; i < 15; i++) {
 		astvis.countup();
 		unitp.accept(astvis);
-		// second arg
-		astvis.countup();
-		unitp.accept(astvis);
-		// third arg
-		astvis.countup();
-		unitp.accept(astvis);
-
-		// fourth arg
-		astvis.countup();
-		unitp.accept(astvis);
-
-		// fifth arg
-		astvis.countup();
-		unitp.accept(astvis);
-
-		// sixth arg
-		astvis.countup();
-		unitp.accept(astvis);
-
+		}
 		
 		astvis.printassertarglist();
 		astvis.printarglist();
@@ -380,6 +355,7 @@ public class SelectionView extends ViewPart {
 	private String currentProject = null;
 	private TestInformation globalTestInformation = new TestInformation();
 
+	/*
 	private TestInformation getAllMethodICompliationUnitInfo(IJavaProject javaProject)
 			throws JavaModelException {
 		if (currentProject != null && currentProject.equals(javaProject.getElementName())) {
