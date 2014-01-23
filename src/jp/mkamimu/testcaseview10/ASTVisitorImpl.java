@@ -1,6 +1,7 @@
 package jp.mkamimu.testcaseview10;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Stack;
 
@@ -13,9 +14,27 @@ import org.eclipse.jdt.core.dom.TypeDeclaration;
 
 public class ASTVisitorImpl extends ASTVisitor {
 	
-	CompilationUnit cu;
-	String currentMethodName = null;
+	private CompilationUnit cu;
+	private String currentMethodName = null;
+	//private List<List<Integer>> linelist = new ArrayList<List<Integer>>();
+	// line, number
+	private HashMap<Integer, Integer> linelist = null;
 	
+	private List<List<String>> arglist = new ArrayList<List<String>>();
+	private List<String> assertarglist = new ArrayList<String>();
+	
+	private List<List<String>> wholelist = new ArrayList<List<String>>();
+	private List<String> wholeassertarglist = new ArrayList<String>();
+
+	
+	public void setHashMap(HashMap<Integer, Integer> linelist) {
+		this.linelist = linelist;
+	}
+	public HashMap<Integer, Integer> getHashMap() {
+		return this.linelist;
+	}
+	
+
 	private int countflag = 0;
 	
 	public void countup() {
@@ -79,14 +98,6 @@ public class ASTVisitorImpl extends ASTVisitor {
 		super.endVisit(node);
 	}
 	
-	List<List<Integer>> linelist = new ArrayList<List<Integer>>();
-	
-	List<List<String>> arglist = new ArrayList<List<String>>();
-	List<String> assertarglist = new ArrayList<String>();
-	
-	List<List<String>> wholelist = new ArrayList<List<String>>();
-	List<String> wholeassertarglist = new ArrayList<String>();
-
 	
 	public String printassertarglist() {
 		StringBuffer strbuf = new StringBuffer();
@@ -168,7 +179,8 @@ public class ASTVisitorImpl extends ASTVisitor {
 						&& arglist.get(countflag - 2).contains(node.getParent().toString())) {
 					tmpflag = true;
 				}
-				if (linelist.get(countflag - 2).contains(cu.getLineNumber(node.getStartPosition()))) {
+				// line has number
+				if (linelist.get(cu.getLineNumber(node.getStartPosition())) != null) {
 					tmpflag = true;
 				}
 				
@@ -206,15 +218,17 @@ public class ASTVisitorImpl extends ASTVisitor {
 				tmpwholelistcount.addAll(wholelistcount);
 				wholelist.set(countflag - 1, tmpwholelistcount);
 				
-				List<Integer> tmplinelistcount = linelist.get(countflag - 1);
-				tmplinelistcount.addAll(linelistcount);
-				linelist.set(countflag - 1, tmplinelistcount);
+				//List<Integer> tmplinelistcount = linelist.get(countflag - 1);
+				//tmplinelistcount.addAll(linelistcount);
+				//linelist.set(countflag - 1, tmplinelistcount);
+				linelist.put(cu.getLineNumber(node.getStartPosition()), countflag - 1);
 				
 			} else {
 				if (!arglist.contains(arglistcount)) {
 					arglist.add(arglistcount);
 					wholelist.add(wholelistcount);
-					linelist.add(linelistcount);
+					//linelist.add(linelistcount);
+					linelist.put(cu.getLineNumber(node.getStartPosition()), countflag - 1);
 				}
 			}
 		}

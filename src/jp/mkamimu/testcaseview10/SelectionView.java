@@ -1,6 +1,7 @@
 package jp.mkamimu.testcaseview10;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import org.eclipse.core.resources.IProject;
@@ -257,16 +258,16 @@ public class SelectionView extends ViewPart {
 		unitp.accept(astmvis);
 		List<String> methodlist = astmvis.getMethodDeclarationList();
 
-		//List<TypeDeclaration> typeinfo = unitp.types();
+		HashMap<Integer, Integer> linelistall = new HashMap<Integer, Integer>();
 		
 		for (int j = 0; j < methodlist.size(); j++) {
 			ASTVisitorImpl astvis = new ASTVisitorImpl(unitp);
 			String methodname = methodlist.get(j);
-			//TypeDeclaration tp = typeinfo.get(j);
 			str.add(methodname + "\n");
 			System.out.println(methodname + "\n");
 			
 			astvis.setCurrentMethod(methodname);
+			astvis.setHashMap(linelistall);
 			// for assert
 			unitp.accept(astvis);
 			
@@ -282,6 +283,11 @@ public class SelectionView extends ViewPart {
 			str.add(astvis.printassertwholelist());
 			str.add("\n");
 			str.add(astvis.printwholelist());
+			linelistall = astvis.getHashMap();
+		}
+		
+		for(Integer keys : linelistall.keySet()) {
+			System.out.println(keys +":"+ linelistall.get(keys));
 		}
 		
 		return str.toString();
