@@ -272,7 +272,8 @@ public class SelectionView extends ViewPart {
 			unitp.accept(astvis);
 			
 			// first arg
-			for (int i = 0; i < 15; i++) {
+			while(astvis.needAnalysis()) {
+			//for (int i = 0; i < 15; i++) {
 			astvis.countup();
 			unitp.accept(astvis);
 			}

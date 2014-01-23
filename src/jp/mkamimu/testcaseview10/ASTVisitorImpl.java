@@ -16,7 +16,7 @@ public class ASTVisitorImpl extends ASTVisitor {
 	
 	private CompilationUnit cu;
 	private String currentMethodName = null;
-	//private List<List<Integer>> linelist = new ArrayList<List<Integer>>();
+
 	// line, number
 	private HashMap<Integer, Integer> linelist = null;
 	
@@ -32,6 +32,15 @@ public class ASTVisitorImpl extends ASTVisitor {
 	}
 	public HashMap<Integer, Integer> getHashMap() {
 		return this.linelist;
+	}
+	
+	public boolean needAnalysis() {
+		//System.out.println(arglist.size() + ":" + countflag);
+		if (arglist.size() >= countflag) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 	
 
