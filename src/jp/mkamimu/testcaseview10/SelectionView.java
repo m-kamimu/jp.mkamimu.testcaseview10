@@ -19,7 +19,6 @@ import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTParser;
 import org.eclipse.jdt.core.dom.CompilationUnit;
-import org.eclipse.jdt.core.dom.TypeDeclaration;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.Document;
 import org.eclipse.jface.text.IMarkSelection;
@@ -282,6 +281,7 @@ public class SelectionView extends ViewPart {
 			
 			astvis.printassertarglist();
 			astvis.printarglist();
+			astvis.printwholelist();
 	
 			//str.add(astvis.printassertwholelist());
 			//str.add("\n");
@@ -300,11 +300,11 @@ public class SelectionView extends ViewPart {
 			while((line = reader.readLine()) != null) {
 				Integer linenum = linelistall.get(l);
 				if (linenum == null) {
-					System.out.println(":		"+line);
-					str.append(":		"+line+"\n");
+					System.out.println(l + "::				"+line);
+					str.append(l + "::				"+line+"\n");
 				} else {
-					System.out.println(linelistall.get(l) + ":		"+line);
-					str.append(linelistall.get(l) + ":		"+line+"\n");
+					System.out.println(l+":" + linelistall.get(l) + ":				"+line);
+					str.append(l+":" + linelistall.get(l) + ":				"+line+"\n");
 				}
 				l++;
 			}

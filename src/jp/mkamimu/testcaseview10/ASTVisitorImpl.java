@@ -157,6 +157,9 @@ public class ASTVisitorImpl extends ASTVisitor {
 	private int sntmpflag = 0;
 	
 	public boolean visit(SimpleName node) {
+		//System.out.println(node);
+		
+		
 		if (currentMethod.isEmpty() || !currentMethod.peek().equals(currentMethodName)) {
 			return super.visit(node);
 		}
@@ -178,7 +181,7 @@ public class ASTVisitorImpl extends ASTVisitor {
 					tmpflag = true;
 				}
 				
-			} else if (arglist.size() > 0 && arglist.size() > countflag - 2) {
+			} else if (arglist.size() > countflag - 2) {
 				//for(int i = 0; i < node.arguments().size(); i++) {
 					if (arglist.get(countflag - 2).contains(node.toString())) {
 						tmpflag = true;
@@ -207,40 +210,46 @@ public class ASTVisitorImpl extends ASTVisitor {
 
 	
 			if (sntmpflag > 0) {
-
-			List<Integer> linelistcount = new ArrayList<Integer>();
-			List<String> arglistcount = new ArrayList<String>();
-			List<String> wholelistcount = new ArrayList<String>();
-
+				List<Integer> linelistcount = new ArrayList<Integer>();
+				List<String> arglistcount = new ArrayList<String>();
+				List<String> wholelistcount = new ArrayList<String>();
+	
 				if (!node.toString().equals("null")) {
 					arglistcount.add(node.toString());
 					linelistcount.add(cu.getLineNumber(node.getStartPosition()));
 				}
-			wholelistcount.add(node.getParent().toString().replaceAll("\n",""));
-			
-			if (arglist.size() > countflag - 1) {
-				List<String> tmparglistcount = arglist.get(countflag - 1);
-				tmparglistcount.addAll(arglistcount);
-				arglist.set(countflag - 1, tmparglistcount);
+				wholelistcount.add(node.getParent().toString().replaceAll("\n",""));
+				//System.out.println(node.toString() +"thisline:" + cu.getLineNumber(node.getStartPosition()) +":"+ (countflag - 1));
 				
-				List<String> tmpwholelistcount = wholelist.get(countflag - 1);
-				tmpwholelistcount.addAll(wholelistcount);
-				wholelist.set(countflag - 1, tmpwholelistcount);
-				
-				//List<Integer> tmplinelistcount = linelist.get(countflag - 1);
-				//tmplinelistcount.addAll(linelistcount);
-				//linelist.set(countflag - 1, tmplinelistcount);
-				linelist.put(cu.getLineNumber(node.getStartPosition()), countflag - 1);
-				
-			} else {
-				if (!arglist.contains(arglistcount)) {
-					arglist.add(arglistcount);
-					wholelist.add(wholelistcount);
-					//linelist.add(linelistcount);
-					linelist.put(cu.getLineNumber(node.getStartPosition()), countflag - 1);
+				if (arglist.size() > countflag - 1) {
+					List<String> tmparglistcount = arglist.get(countflag - 1);
+					tmparglistcount.addAll(arglistcount);
+					arglist.set(countflag - 1, tmparglistcount);
+					
+					List<String> tmpwholelistcount = wholelist.get(countflag - 1);
+					tmpwholelistcount.addAll(wholelistcount);
+					wholelist.set(countflag - 1, tmpwholelistcount);
+					
+					//List<Integer> tmplinelistcount = linelist.get(countflag - 1);
+					//tmplinelistcount.addAll(linelistcount);
+					//linelist.set(countflag - 1, tmplinelistcount);
+					if (linelist.get(cu.getLineNumber(node.getStartPosition())) == null) {
+						linelist.put(cu.getLineNumber(node.getStartPosition()), countflag - 1);
+					//	System.out.println(node.toString() +"b:" + cu.getLineNumber(node.getStartPosition()) +":"+ (countflag - 1));
+					}
+					
+				} else {
+					if (!arglist.contains(arglistcount)) {
+						arglist.add(arglistcount);
+						wholelist.add(wholelistcount);
+						//linelist.add(linelistcount);
+						if (linelist.get(cu.getLineNumber(node.getStartPosition())) == null) {
+							linelist.put(cu.getLineNumber(node.getStartPosition()), countflag - 1);
+						//	System.out.println(node.toString() +"a:" + cu.getLineNumber(node.getStartPosition()) +":"+ (countflag - 1));
+						}
+					}
 				}
 			}
-		}
 		}
 		
 		
@@ -274,7 +283,16 @@ public class ASTVisitorImpl extends ASTVisitor {
 			}
 			if (node.getExpression() != null) {
 				assertarglist.add(node.getExpression().toString());
+				if (node.getExpression().toString().contains(".")) {
+					String tmp = node.getExpression().toString();
+					while(tmp.indexOf(".") > 0) {
+						tmp = tmp.substring(0, tmp.indexOf("."));
+						//System.out.println("tmp:" + tmp);
+						assertarglist.add(tmp);
+					}
+				}
 			}
+			
 
 			wholeassertarglist.add(node.toString());
 			
