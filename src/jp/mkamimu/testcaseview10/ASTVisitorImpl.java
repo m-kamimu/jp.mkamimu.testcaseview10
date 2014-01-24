@@ -25,8 +25,12 @@ public class ASTVisitorImpl extends ASTVisitor {
 	
 	private List<List<String>> wholelist = new ArrayList<List<String>>();
 	private List<String> wholeassertarglist = new ArrayList<String>();
-
 	
+	private boolean searchmode = false;  // false: get simplename/arglist , true: get: linenum
+	
+	public void setSearchmode(boolean searchmode) {
+		this.searchmode = searchmode;
+	}
 	public void setHashMap(HashMap<Integer, Integer> linelist) {
 		this.linelist = linelist;
 	}
@@ -111,7 +115,7 @@ public class ASTVisitorImpl extends ASTVisitor {
 	public String printassertarglist() {
 		StringBuffer strbuf = new StringBuffer();
 		for(int i = 0; i < assertarglist.size(); i++) {
-			System.out.println("assertarglist: " + assertarglist.get(i).toString());
+			//System.out.println("assertarglist: " + assertarglist.get(i).toString());
 			strbuf.append("assertarglist: " + assertarglist.get(i).toString());
 			strbuf.append("\n");
 		}
@@ -122,7 +126,7 @@ public class ASTVisitorImpl extends ASTVisitor {
 		StringBuffer strbuf = new StringBuffer();
 		for(int i = 0; i < arglist.size(); i++) {
 			for (int j = 0; j < arglist.get(i).size(); j++) {
-				System.out.println("arglist: " + i + ":" + arglist.get(i).get(j).toString());
+				//System.out.println("arglist: " + i + ":" + arglist.get(i).get(j).toString());
 				strbuf.append("arglist: " + i + ":" + arglist.get(i).get(j).toString());
 				strbuf.append("\n");
 			}
@@ -134,7 +138,7 @@ public class ASTVisitorImpl extends ASTVisitor {
 	public String printassertwholelist() {
 		StringBuffer strbuf = new StringBuffer();
 		for(int i = 0; i < wholeassertarglist.size(); i++) {
-			System.out.println("assertwholelist: " + wholeassertarglist.get(i).toString());
+			//System.out.println("assertwholelist: " + wholeassertarglist.get(i).toString());
 			strbuf.append("assertwholelist: " + wholeassertarglist.get(i).toString());
 			strbuf.append("\n");
 		}
@@ -145,7 +149,7 @@ public class ASTVisitorImpl extends ASTVisitor {
 		StringBuffer strbuf = new StringBuffer();
 		for(int i = 0; i < wholelist.size(); i++) {
 			for (int j = 0; j < wholelist.get(i).size(); j++) {
-				System.out.println("wholelist: " + i + ":" + wholelist.get(i).get(j).toString());
+				//System.out.println("wholelist: " + i + ":" + wholelist.get(i).get(j).toString());
 				strbuf.append("wholelist: " + i + ":" + wholelist.get(i).get(j).toString());
 				strbuf.append("\n");
 			}
@@ -157,6 +161,10 @@ public class ASTVisitorImpl extends ASTVisitor {
 	private int sntmpflag = 0;
 	
 	public boolean visit(SimpleName node) {
+		if (assertFlag) {
+			assertarglist.add(node.toString());
+		}
+		
 		//System.out.println(node);
 		
 		
@@ -166,6 +174,7 @@ public class ASTVisitorImpl extends ASTVisitor {
 		
 		boolean tmpflag = false; 
 		//System.out.println("Simple:" + node.toString());
+		//System.out.println("Simpleline:" + cu.getLineNumber(node.getStartPosition()));
 		//System.out.println("SimpleParent:" + node.getParent().toString());
 		
 		
@@ -178,6 +187,10 @@ public class ASTVisitorImpl extends ASTVisitor {
 				//}
 				if (node.getParent() != null 
 						&& assertarglist.contains(node.getParent().toString())) {
+					tmpflag = true;
+				}
+				// line has number
+				if (linelist.get(cu.getLineNumber(node.getStartPosition())) != null) {
 					tmpflag = true;
 				}
 				
@@ -210,43 +223,52 @@ public class ASTVisitorImpl extends ASTVisitor {
 
 	
 			if (sntmpflag > 0) {
-				List<Integer> linelistcount = new ArrayList<Integer>();
-				List<String> arglistcount = new ArrayList<String>();
-				List<String> wholelistcount = new ArrayList<String>();
-	
-				if (!node.toString().equals("null")) {
-					arglistcount.add(node.toString());
-					linelistcount.add(cu.getLineNumber(node.getStartPosition()));
-				}
-				wholelistcount.add(node.getParent().toString().replaceAll("\n",""));
-				//System.out.println(node.toString() +"thisline:" + cu.getLineNumber(node.getStartPosition()) +":"+ (countflag - 1));
-				
-				if (arglist.size() > countflag - 1) {
-					List<String> tmparglistcount = arglist.get(countflag - 1);
-					tmparglistcount.addAll(arglistcount);
-					arglist.set(countflag - 1, tmparglistcount);
+				if (!this.searchmode) {
+					List<Integer> linelistcount = new ArrayList<Integer>();
+					List<String> arglistcount = new ArrayList<String>();
+					List<String> wholelistcount = new ArrayList<String>();
+		
+					if (!node.toString().equals("null")) {
+						arglistcount.add(node.toString());
+						linelistcount.add(cu.getLineNumber(node.getStartPosition()));
+					}
+					wholelistcount.add(node.getParent().toString().replaceAll("\n",""));
+					//System.out.println(node.toString() +"thisline:" + cu.getLineNumber(node.getStartPosition()) +":"+ (countflag - 1));
 					
-					List<String> tmpwholelistcount = wholelist.get(countflag - 1);
-					tmpwholelistcount.addAll(wholelistcount);
-					wholelist.set(countflag - 1, tmpwholelistcount);
-					
-					//List<Integer> tmplinelistcount = linelist.get(countflag - 1);
-					//tmplinelistcount.addAll(linelistcount);
-					//linelist.set(countflag - 1, tmplinelistcount);
+					if (arglist.size() > countflag - 1) {
+						List<String> tmparglistcount = arglist.get(countflag - 1);
+						tmparglistcount.addAll(arglistcount);
+						arglist.set(countflag - 1, tmparglistcount);
+						
+						List<String> tmpwholelistcount = wholelist.get(countflag - 1);
+						tmpwholelistcount.addAll(wholelistcount);
+						wholelist.set(countflag - 1, tmpwholelistcount);
+						
+						//List<Integer> tmplinelistcount = linelist.get(countflag - 1);
+						//tmplinelistcount.addAll(linelistcount);
+						//linelist.set(countflag - 1, tmplinelistcount);
+//						if (linelist.get(cu.getLineNumber(node.getStartPosition())) == null) {
+//							linelist.put(cu.getLineNumber(node.getStartPosition()), countflag - 1);
+//						//	System.out.println(node.toString() +"b:" + cu.getLineNumber(node.getStartPosition()) +":"+ (countflag - 1));
+//						}
+						
+					} else {
+						if (!arglist.contains(arglistcount)) {
+							arglist.add(arglistcount);
+							wholelist.add(wholelistcount);
+							//linelist.add(linelistcount);
+//							if (linelist.get(cu.getLineNumber(node.getStartPosition())) == null) {
+//								linelist.put(cu.getLineNumber(node.getStartPosition()), countflag - 1);
+//							//	System.out.println(node.toString() +"a:" + cu.getLineNumber(node.getStartPosition()) +":"+ (countflag - 1));
+//							}
+						}
+					}
+				} else {
 					if (linelist.get(cu.getLineNumber(node.getStartPosition())) == null) {
 						linelist.put(cu.getLineNumber(node.getStartPosition()), countflag - 1);
-					//	System.out.println(node.toString() +"b:" + cu.getLineNumber(node.getStartPosition()) +":"+ (countflag - 1));
-					}
-					
-				} else {
-					if (!arglist.contains(arglistcount)) {
-						arglist.add(arglistcount);
-						wholelist.add(wholelistcount);
-						//linelist.add(linelistcount);
-						if (linelist.get(cu.getLineNumber(node.getStartPosition())) == null) {
-							linelist.put(cu.getLineNumber(node.getStartPosition()), countflag - 1);
-						//	System.out.println(node.toString() +"a:" + cu.getLineNumber(node.getStartPosition()) +":"+ (countflag - 1));
-						}
+						//System.out.println(node.toString() +"a:" + cu.getLineNumber(node.getStartPosition()) +":"+ (countflag - 1));
+					} else {
+						//System.out.println(node.toString() +"b:" + cu.getLineNumber(node.getStartPosition()) +":"+ (countflag - 1));
 					}
 				}
 			}

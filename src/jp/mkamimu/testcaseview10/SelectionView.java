@@ -270,13 +270,19 @@ public class SelectionView extends ViewPart {
 			astvis.setCurrentMethod(methodname);
 			astvis.setHashMap(linelistall);
 			// for assert
+			astvis.setSearchmode(false);
+			unitp.accept(astvis);
+			astvis.setSearchmode(true);
 			unitp.accept(astvis);
 			
 			// first arg
 			while(astvis.needAnalysis()) {
-			//for (int i = 0; i < 15; i++) {
-			astvis.countup();
-			unitp.accept(astvis);
+				//for (int i = 0; i < 15; i++) {
+				astvis.countup();
+				astvis.setSearchmode(false);
+				unitp.accept(astvis);
+				astvis.setSearchmode(true);
+				unitp.accept(astvis);
 			}
 			
 			astvis.printassertarglist();
@@ -290,7 +296,7 @@ public class SelectionView extends ViewPart {
 		}
 		
 		for(Integer keys : linelistall.keySet()) {
-			System.out.println(keys +":"+ linelistall.get(keys));
+			//System.out.println(keys +":"+ linelistall.get(keys));
 		}
 		
 		try {
