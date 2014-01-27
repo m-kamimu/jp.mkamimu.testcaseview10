@@ -277,7 +277,7 @@ public class SelectionView extends ViewPart {
 			
 			// first arg
 			while(astvis.needAnalysis()) {
-				//for (int i = 0; i < 15; i++) {
+				//for (int i = 0; i < 10; i++) {
 				astvis.countup();
 				astvis.setSearchmode(false);
 				unitp.accept(astvis);
@@ -287,7 +287,7 @@ public class SelectionView extends ViewPart {
 			
 			astvis.printassertarglist();
 			astvis.printarglist();
-			astvis.printwholelist();
+			//astvis.printwholelist();
 	
 			//str.add(astvis.printassertwholelist());
 			//str.add("\n");
