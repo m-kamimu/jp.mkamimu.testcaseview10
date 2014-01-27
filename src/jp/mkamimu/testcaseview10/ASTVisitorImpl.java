@@ -22,9 +22,6 @@ public class ASTVisitorImpl extends ASTVisitor {
 	private List<List<String>> arglist = new ArrayList<List<String>>();
 	private List<String> assertarglist = new ArrayList<String>();
 	
-	//private List<List<String>> wholelist = new ArrayList<List<String>>();
-	//private List<String> wholeassertarglist = new ArrayList<String>();
-	
 	private List<String> methodinvoname = new ArrayList<String>();
 	
 	private boolean searchmode = false;  // false: get simplename/arglist , true: get: linenum
@@ -55,7 +52,7 @@ public class ASTVisitorImpl extends ASTVisitor {
 		countflag++;
 	}
 	
-	ASTVisitorImpl(CompilationUnit cu) {
+	public ASTVisitorImpl(CompilationUnit cu) {
 		this.cu = cu;
 	}
 	
@@ -110,30 +107,6 @@ public class ASTVisitorImpl extends ASTVisitor {
 		return strbuf.toString();
 	}
 
-	/*
-	public String printassertwholelist() {
-		StringBuffer strbuf = new StringBuffer();
-		for(int i = 0; i < wholeassertarglist.size(); i++) {
-			System.out.println("assertwholelist: " + wholeassertarglist.get(i).toString());
-			strbuf.append("assertwholelist: " + wholeassertarglist.get(i).toString());
-			strbuf.append("\n");
-		}
-		return strbuf.toString();
-	}
-
-	public String printwholelist() {
-		StringBuffer strbuf = new StringBuffer();
-		for(int i = 0; i < wholelist.size(); i++) {
-			for (int j = 0; j < wholelist.get(i).size(); j++) {
-				System.out.println("wholelist: " + i + ":" + wholelist.get(i).get(j).toString());
-				strbuf.append("wholelist: " + i + ":" + wholelist.get(i).get(j).toString());
-				strbuf.append("\n");
-			}
-			System.out.println("wholelist: " + wholelist.get(i).toString());
-		}
-		return strbuf.toString();
-	}*/
-	
 	private int sntmpflag = 0;
 	
 	public boolean visit(SimpleName node) {
@@ -145,7 +118,6 @@ public class ASTVisitorImpl extends ASTVisitor {
 			assertarglist.add(node.toString());
 		}
 		//System.out.println(node);
-		
 		
 		if (currentMethod.isEmpty() || !currentMethod.peek().equals(currentMethodName)) {
 			return super.visit(node);
@@ -220,54 +192,7 @@ public class ASTVisitorImpl extends ASTVisitor {
 					System.out.println(node.toString() +":b:" + cu.getLineNumber(node.getStartPosition()) +":"+ (countflag - 1));
 				}
 
-			/*	
-				List<Integer> linelistcount = new ArrayList<Integer>();
-				List<String> arglistcount = new ArrayList<String>();
-				List<String> wholelistcount = new ArrayList<String>();
-	
-				if (!node.toString().equals("null")) {
-					arglistcount.add(node.toString());
-					linelistcount.add(cu.getLineNumber(node.getStartPosition()));
-				}
-				wholelistcount.add(node.getParent().toString().replaceAll("\n",""));
-				//System.out.println(node.toString() +"thisline:" + cu.getLineNumber(node.getStartPosition()) +":"+ (countflag - 1));
-				
-				if (arglist.size() > countflag - 1) {
-					List<String> tmparglistcount = arglist.get(countflag - 1);
-					tmparglistcount.addAll(arglistcount);
-					arglist.set(countflag - 1, tmparglistcount);
-					
-					/*List<String> tmpwholelistcount = wholelist.get(countflag - 1);
-					tmpwholelistcount.addAll(wholelistcount);
-					wholelist.set(countflag - 1, tmpwholelistcount);*/
-					
-					//List<Integer> tmplinelistcount = linelist.get(countflag - 1);
-					//tmplinelistcount.addAll(linelistcount);
-					//linelist.set(countflag - 1, tmplinelistcount);
-//						if (linelist.get(cu.getLineNumber(node.getStartPosition())) == null) {
-//							linelist.put(cu.getLineNumber(node.getStartPosition()), countflag - 1);
-//						//	System.out.println(node.toString() +"b:" + cu.getLineNumber(node.getStartPosition()) +":"+ (countflag - 1));
-//						}
-				/*	
-					} else {
-						if (!arglist.contains(arglistcount)) {
-							arglist.add(arglistcount);
-							//wholelist.add(wholelistcount);
-							//linelist.add(linelistcount);
-//							if (linelist.get(cu.getLineNumber(node.getStartPosition())) == null) {
-//								linelist.put(cu.getLineNumber(node.getStartPosition()), countflag - 1);
-//							//	System.out.println(node.toString() +"a:" + cu.getLineNumber(node.getStartPosition()) +":"+ (countflag - 1));
-//							}
-						}
-					}*/
 			} else { // add simplename
-//					if (linelist.get(cu.getLineNumber(node.getStartPosition())) == null) {
-//						linelist.put(cu.getLineNumber(node.getStartPosition()), countflag - 1);
-//						System.out.println(node.toString() +":a:" + cu.getLineNumber(node.getStartPosition()) +":"+ (countflag - 1));
-//						
-//					} else {
-//						System.out.println(node.toString() +":b:" + cu.getLineNumber(node.getStartPosition()) +":"+ (countflag - 1));
-//					}
 				
 				if (!methodinvoname.contains(node.toString())) {
 					for(int j = 2; j < countflag; j++) {
@@ -336,9 +261,6 @@ public class ASTVisitorImpl extends ASTVisitor {
 					}
 				}
 			}
-			//wholeassertarglist.add(node.toString());
-			
-			//System.out.println("assertname: " + node.getName());
 			System.out.println("assertnodep:" + node.getExpression());
 			
 			assertFlag = true;
