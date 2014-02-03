@@ -4,7 +4,6 @@ import static org.junit.Assert.*;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
-import java.io.StringReader;
 import java.util.HashMap;
 import java.util.List;
 
@@ -15,10 +14,6 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTParser;
 import org.eclipse.jdt.core.dom.CompilationUnit;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 public class ASTVisitorImplTest {
@@ -94,7 +89,7 @@ public class ASTVisitorImplTest {
 			String line;
 			while((line = reader.readLine()) != null) {
 				Integer linenum = linelistall.get(l);
-				String linetoken = lineliststrall.get(l);
+				//String linetoken = lineliststrall.get(l);
 				
 				if (linenum == null) {
 					System.out.println(l + "::								"+line);
@@ -105,6 +100,7 @@ public class ASTVisitorImplTest {
 				}
 				l++;
 			}
+			reader.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
