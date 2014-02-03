@@ -63,19 +63,24 @@ public class Decorator implements ILightweightLabelDecorator{
 				ICompilationUnit unit = JavaCore.createCompilationUnitFrom(file);
 				if (unit != null) {					
 					RGB rgb = null;
-					//sv.getOneMethodICompilationUnitInfo(unit, false);
-					int count = sv.largest();
-					if (count == 0) {
+					sv.getOneMethodICompilationUnitInfo(unit);
+					int count = sv.getmaxnum();
+					int tmpc = sv.getassertnum();
+					if (count == 0 && tmpc == 0) {
+						//rgb = new RGB(255, 255, 0);
+						rgb = new RGB(200, 255, 200);
+					} else if (count >= 0 && count < 3) {
+						rgb = new RGB(255, 255, 200);					
+					} else if (count >= 3) {
 						rgb = new RGB(255, 255, 0);
-					} else if (count == 1) {
-						rgb = new RGB(255, 255, 200);						
-					} else if (count == 2) {
-						rgb = new RGB(0,255,0);
+						//rgb = new RGB(0,255,0);
 						/*Font font = new Font(PlatformUI.getWorkbench().getDisplay(),new FontData("Arial", 10, SWT.BOLD));
 						decoration.setFont(font);*/
 					} else {
-						rgb = new RGB(200, 255, 200);												
+						rgb = new RGB(200, 255, 0);												
 					}
+					sv.resetmaxnum();
+					sv.resetassertnum();
 					Color color = new Color(PlatformUI.getWorkbench().getDisplay(), rgb);
 					decoration.setBackgroundColor(color);
 					

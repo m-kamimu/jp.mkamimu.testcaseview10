@@ -242,6 +242,33 @@ public class SelectionView extends ViewPart {
 		return count;
 	}
 	
+	private int assertnum = 0;
+	private int maxnum = 0;
+	
+	private void setassertNum(int num) {
+		if (assertnum < num) {
+			assertnum = num;
+		}
+	}
+	
+	private void setmaxNum(int num) {
+		if (maxnum < num) {
+			maxnum = num;
+		}
+	}
+	
+	public int getassertnum() {
+		return assertnum;
+	}
+	public int getmaxnum() {
+		return maxnum;
+	}
+	public void resetmaxnum() {
+		maxnum = 0;
+	}
+	public void resetassertnum() {
+		assertnum = 0;
+	}
 	
 	public String getOneMethodICompilationUnitInfo(ICompilationUnit unit) 
 			throws JavaModelException {
@@ -287,7 +314,10 @@ public class SelectionView extends ViewPart {
 				unitp.accept(astvis);
 			}
 			
-			astvis.printassertarglist();
+			String tmpsb = astvis.printassertarglist();
+			if (tmpsb.length() > 0) {
+				setassertNum(1);
+			}
 			astvis.printarglist();
 			//astvis.printwholelist();
 	
@@ -317,6 +347,7 @@ public class SelectionView extends ViewPart {
 				} else {
 					System.out.println(l+":" + linelistall.get(l) + ":" + lineliststrall.get(l) + ":						"+line);
 					str.append(l+":" + linelistall.get(l) + ":" + lineliststrall.get(l) + ":						"+line+"\n");
+					setmaxNum(linelistall.get(l));
 				}
 				l++;
 			}
