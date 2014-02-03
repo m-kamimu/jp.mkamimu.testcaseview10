@@ -223,7 +223,7 @@ public class ASTVisitorImpl extends ASTVisitor {
 						List<String> arglistcount = new ArrayList<String>();
 						arglistcount.add(node.toString());
 						
-						if (arglist.size() > countflag - 1) {
+						if (arglist.size() > countflag - 1 && countflag > 0) {
 							List<String> tmparglistcount = arglist.get(countflag - 1);
 							tmparglistcount.addAll(arglistcount);
 							arglist.set(countflag - 1, tmparglistcount);
