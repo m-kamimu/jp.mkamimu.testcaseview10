@@ -23,22 +23,6 @@ import org.junit.Test;
 
 public class ASTVisitorImplTest {
 
-	@BeforeClass
-	public static void setUpBeforeClass() throws Exception {
-	}
-
-	@AfterClass
-	public static void tearDownAfterClass() throws Exception {
-	}
-
-	@Before
-	public void setUp() throws Exception {
-	}
-
-	@After
-	public void tearDown() throws Exception {
-	}
-
 	@Test
 	public final void testASTVisitorImpl() {
         StringBuffer sb = new StringBuffer();
@@ -104,9 +88,9 @@ public class ASTVisitorImplTest {
 			System.out.println(keys +":"+ linelistall.get(keys));
 		}
 
+		int l = 1;
 		try {
 			BufferedReader reader = new BufferedReader(new FileReader("testdata/ASTRewriteSnippet.java"));
-			int l = 1;
 			String line;
 			while((line = reader.readLine()) != null) {
 				Integer linenum = linelistall.get(l);
@@ -137,34 +121,34 @@ public class ASTVisitorImplTest {
 		elinelistall.put(54,3);
 		elineliststrall.put(54,"project");
 		
-		elinelistall.put(57,2);
-		elineliststrall.put(57,"description");
+		elinelistall.put(57,3);
+		elineliststrall.put(57,"project");
 		
-		elinelistall.put(58,1);
-		elineliststrall.put(58,"String");
+		elinelistall.put(58,4);
+		elineliststrall.put(58,"description");
 		
-		elinelistall.put(59,2);
-		elineliststrall.put(59,"description");
+		elinelistall.put(59,3);
+		elineliststrall.put(59,"project");
 		
-		elinelistall.put(61,2);
-		elineliststrall.put(61,"JavaCore");
+		elinelistall.put(61,3);
+		elineliststrall.put(61,"javaProject");
 		
 		elinelistall.put(64,4);
 		elineliststrall.put(64,"cpentry");
 
-		elinelistall.put(65,2);
-		elineliststrall.put(65,"JavaCore");
+		elinelistall.put(65,3);
+		elineliststrall.put(65,"javaProject");
 
 		elinelistall.put(68,3);
 		elineliststrall.put(68,"javaProject");
 
-		elinelistall.put(69,3);
+		elinelistall.put(69,4);
 		elineliststrall.put(69,"options");
 
-		elinelistall.put(70,2);
-		elineliststrall.put(70,"JavaCore");
+		elinelistall.put(70,4);
+		elineliststrall.put(70,"options");
 
-		elinelistall.put(71,3);
+		elinelistall.put(71,4);
 		elineliststrall.put(71,"options");
 
 		elinelistall.put(72,3);
@@ -216,7 +200,7 @@ public class ASTVisitorImplTest {
 		elinelistall.put(100,4);
 		elineliststrall.put(100,"typeDecl");
 		elinelistall.put(101,5);
-		elineliststrall.put(101,"Block");
+		elineliststrall.put(101,"block");
 
 		elinelistall.put(104,4);
 		elineliststrall.put(104,"ast");
@@ -237,11 +221,18 @@ public class ASTVisitorImplTest {
 		elinelistall.put(115,5);
 		elineliststrall.put(115,"listRewrite");
 		elinelistall.put(116,5);
-		elineliststrall.put(115,"listRewrite");
+		elineliststrall.put(116,"listRewrite");
 
 		elinelistall.put(119,3);
 		elineliststrall.put(119,"res");
 
+		elinelistall.put(122,1);
+		elineliststrall.put(122,"cu");
+		elinelistall.put(123,2);
+		elineliststrall.put(123,"document");
+		elinelistall.put(124,1);
+		elineliststrall.put(124,"cu");
+		
 		
 		elinelistall.put(127,0);
 		elineliststrall.put(127,"preview");
@@ -273,9 +264,12 @@ public class ASTVisitorImplTest {
 		elinelistall.put(142,3);
 		elineliststrall.put(142,"project");
 
-		for(int l = 0; l < linelistall.size(); l++) {
-			assertEquals(elinelistall.get(l), linelistall.get(l));
-			assertEquals(elineliststrall.get(l), lineliststrall.get(l));
+		for(int m = 0; m < l; m++) {
+			System.out.println(m +","+elinelistall.get(m)+"," +linelistall.get(m));
+			assertEquals(elinelistall.get(m), linelistall.get(m));
+			
+			System.out.println(m +","+elineliststrall.get(m)+"," +lineliststrall.get(m));
+			assertEquals(elineliststrall.get(m), lineliststrall.get(m));
 		}
 		
 		//fail("Not yet implemented"); // TODO

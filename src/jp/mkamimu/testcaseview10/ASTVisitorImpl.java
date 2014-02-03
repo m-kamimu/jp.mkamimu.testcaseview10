@@ -121,6 +121,10 @@ public class ASTVisitorImpl extends ASTVisitor {
 	private int sntmpflag = 0;
 	
 	public boolean visit(SimpleName node) {
+		if (node.toString().substring(0,1).matches("[A-Z]")) {
+			return super.visit(node); // starts from upper case 
+		}
+		
 		if (methodinvoname.contains(node.toString())) {
 			return super.visit(node);
 		}
