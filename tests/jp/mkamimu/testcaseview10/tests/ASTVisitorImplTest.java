@@ -125,29 +125,6 @@ public class ASTVisitorImplTest {
 			e.printStackTrace();
 		}
 		
-		/*
-		try {
-			BufferedReader reader = new BufferedReader(new FileReader("testdata/ASTRewriteSnippet.java"));
-			int l = 1;
-			String line;
-			while((line = reader.readLine()) != null) {
-				Integer linenum = linelistall.get(l);
-				if (linenum == null) {
-					System.out.println(l + "::				"+line);
-					//str.append(l + "::				"+line+"\n");
-				} else {
-					System.out.println(l+":" + linelistall.get(l) + ":				"+line);
-					//str.append(l+":" + linelistall.get(l) + ":				"+line+"\n");
-				}
-				l++;
-			}
-			reader.close();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}*/
-		
-		
-		
 		fail("Not yet implemented"); // TODO
 	}
 

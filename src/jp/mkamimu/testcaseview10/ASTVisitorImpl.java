@@ -87,7 +87,9 @@ public class ASTVisitorImpl extends ASTVisitor {
 	@Override
 	public void endVisit(MethodDeclaration node) {
 		// TODO Auto-generated method stub
-		if (node.getName().equals(currentMethod.peek())) {
+		System.out.println(node.getName());
+		System.out.println(currentMethod.peek());
+		if (node.getName().toString().equals(currentMethod.peek())) {
 			currentMethod.pop();
 		}
 		super.endVisit(node);
@@ -131,6 +133,7 @@ public class ASTVisitorImpl extends ASTVisitor {
 		if (currentMethod.isEmpty() || !currentMethod.peek().equals(currentMethodName)) {
 			return super.visit(node);
 		}
+		System.out.println("currentmethod:" + currentMethodName);
 		
 		boolean tmpflag = false; 
 		System.out.println(countflag + ": Simple:" + node.toString());
@@ -144,7 +147,7 @@ public class ASTVisitorImpl extends ASTVisitor {
 					if (assertarglist.contains(node.toString())) {
 						tmpflag = true;
 					}
-					// node parent is equal to asssert arg
+					// node parent is equal to assert arg
 					if (node.getParent() != null 
 							&& assertarglist.contains(node.getParent().toString())) {
 						tmpflag = true;
