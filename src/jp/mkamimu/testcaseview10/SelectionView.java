@@ -299,9 +299,9 @@ public class SelectionView extends ViewPart {
 
 		}
 		
-		for(Integer keys : linelistall.keySet()) {
+		//for(Integer keys : linelistall.keySet()) {
 			//System.out.println(keys +":"+ linelistall.get(keys));
-		}
+		//}
 		
 		try {
 			BufferedReader reader = new BufferedReader(new StringReader(unit.getSource()));
@@ -309,7 +309,7 @@ public class SelectionView extends ViewPart {
 			String line;
 			while((line = reader.readLine()) != null) {
 				Integer linenum = linelistall.get(l);
-				String linetoken = lineliststrall.get(l);
+				//String linetoken = lineliststrall.get(l);
 				
 				if (linenum == null) {
 					System.out.println(l + "::								"+line);
