@@ -18,6 +18,7 @@ public class ASTVisitorImpl extends ASTVisitor {
 
 	// line, number
 	private HashMap<Integer, Integer> linelist = null;
+	private HashMap<Integer, String> lineliststr = null;
 	
 	private List<List<String>> arglist = new ArrayList<List<String>>();
 	private List<String> assertarglist = new ArrayList<String>();
@@ -35,6 +36,14 @@ public class ASTVisitorImpl extends ASTVisitor {
 	public HashMap<Integer, Integer> getHashMap() {
 		return this.linelist;
 	}
+	
+	public void setHashMapstr(HashMap<Integer, String> lineliststr) {
+		this.lineliststr = lineliststr;
+	}
+	public HashMap<Integer, String> getHashMapstr() {
+		return this.lineliststr;
+	}
+
 	
 	public boolean needAnalysis() {
 		//System.out.println(arglist.size() + ":" + countflag);
@@ -186,6 +195,7 @@ public class ASTVisitorImpl extends ASTVisitor {
 			if (!this.searchmode) { // add number
 				if (linelist.get(cu.getLineNumber(node.getStartPosition())) == null) {
 					linelist.put(cu.getLineNumber(node.getStartPosition()), countflag - 1);
+					lineliststr.put(cu.getLineNumber(node.getStartPosition()), node.toString());
 					System.out.println(node.toString() +":a:" + cu.getLineNumber(node.getStartPosition()) +":"+ (countflag - 1));
 					
 				} else {

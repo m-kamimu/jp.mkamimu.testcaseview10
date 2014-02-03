@@ -260,6 +260,7 @@ public class SelectionView extends ViewPart {
 		List<String> methodlist = astmvis.getMethodDeclarationList();
 
 		HashMap<Integer, Integer> linelistall = new HashMap<Integer, Integer>();
+		HashMap<Integer, String> lineliststrall = new HashMap<Integer, String>();
 		
 		for (int j = 0; j < methodlist.size(); j++) {
 			ASTVisitorImpl astvis = new ASTVisitorImpl(unitp);
@@ -269,6 +270,7 @@ public class SelectionView extends ViewPart {
 			
 			astvis.setCurrentMethod(methodname);
 			astvis.setHashMap(linelistall);
+			astvis.setHashMapstr(lineliststrall);
 			// for assert
 			astvis.setSearchmode(false);
 			unitp.accept(astvis);
@@ -293,6 +295,8 @@ public class SelectionView extends ViewPart {
 			//str.add("\n");
 			//str.add(astvis.printwholelist());
 			linelistall = astvis.getHashMap();
+			lineliststrall = astvis.getHashMapstr();
+
 		}
 		
 		for(Integer keys : linelistall.keySet()) {
@@ -305,12 +309,14 @@ public class SelectionView extends ViewPart {
 			String line;
 			while((line = reader.readLine()) != null) {
 				Integer linenum = linelistall.get(l);
+				String linetoken = lineliststrall.get(l);
+				
 				if (linenum == null) {
-					System.out.println(l + "::				"+line);
-					str.append(l + "::				"+line+"\n");
+					System.out.println(l + "::								"+line);
+					str.append(l + "::								"+line+"\n");
 				} else {
-					System.out.println(l+":" + linelistall.get(l) + ":				"+line);
-					str.append(l+":" + linelistall.get(l) + ":				"+line+"\n");
+					System.out.println(l+":" + linelistall.get(l) + ":" + lineliststrall.get(l) + ":						"+line);
+					str.append(l+":" + linelistall.get(l) + ":" + lineliststrall.get(l) + ":						"+line+"\n");
 				}
 				l++;
 			}

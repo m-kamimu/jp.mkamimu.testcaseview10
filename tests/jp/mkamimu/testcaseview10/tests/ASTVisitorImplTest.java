@@ -3,7 +3,6 @@ package jp.mkamimu.testcaseview10.tests;
 import static org.junit.Assert.*;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileReader;
 import java.io.StringReader;
 import java.util.HashMap;
@@ -13,8 +12,6 @@ import jp.mkamimu.testcaseview10.ASTMethodDeclarationVisitorImpl;
 import jp.mkamimu.testcaseview10.ASTVisitorImpl;
 
 import org.eclipse.core.runtime.NullProgressMonitor;
-import org.eclipse.jdt.core.IClassFile;
-import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTParser;
 import org.eclipse.jdt.core.dom.CompilationUnit;
@@ -52,6 +49,7 @@ public class ASTVisitorImplTest {
 	        String s;
 	        while((s = b.readLine())!=null){
 	            sb.append(s);
+	            sb.append("\n");
 	        }
 	        b.close();
 		} catch (Exception e) {
@@ -59,6 +57,7 @@ public class ASTVisitorImplTest {
 	    }
 
 		ASTParser parser = ASTParser.newParser(AST.JLS4);
+		parser.setKind(ASTParser.K_COMPILATION_UNIT);
 		parser.setSource(sb.toString().toCharArray());
 		CompilationUnit unitp = (CompilationUnit)parser.createAST(new NullProgressMonitor());
 		//ASTVisitorImpl astvis = new ASTVisitorImpl(unitp);
@@ -69,6 +68,7 @@ public class ASTVisitorImplTest {
 		List<String> methodlist = astmvis.getMethodDeclarationList();
 
 		HashMap<Integer, Integer> linelistall = new HashMap<Integer, Integer>();
+		HashMap<Integer, String> lineliststrall = new HashMap<Integer, String>();
 		
 		for (int j = 0; j < methodlist.size(); j++) {
 			ASTVisitorImpl astvis = new ASTVisitorImpl(unitp);
@@ -78,6 +78,7 @@ public class ASTVisitorImplTest {
 			
 			astvis.setCurrentMethod(methodname);
 			astvis.setHashMap(linelistall);
+			astvis.setHashMapstr(lineliststrall);
 			// for assert
 			astvis.setSearchmode(false);
 			unitp.accept(astvis);
@@ -103,7 +104,28 @@ public class ASTVisitorImplTest {
 			System.out.println(keys +":"+ linelistall.get(keys));
 		}
 
+		try {
+			BufferedReader reader = new BufferedReader(new FileReader("testdata/ASTRewriteSnippet.java"));
+			int l = 1;
+			String line;
+			while((line = reader.readLine()) != null) {
+				Integer linenum = linelistall.get(l);
+				String linetoken = lineliststrall.get(l);
+				
+				if (linenum == null) {
+					System.out.println(l + "::								"+line);
+					//str.append(l + "::								"+line+"\n");
+				} else {
+					System.out.println(l+":" + linelistall.get(l) + ":" + lineliststrall.get(l) + ":						"+line);
+					//str.append(l+":" + linelistall.get(l) + ":" + lineliststrall.get(l) + ":						"+line+"\n");
+				}
+				l++;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		
+		/*
 		try {
 			BufferedReader reader = new BufferedReader(new FileReader("testdata/ASTRewriteSnippet.java"));
 			int l = 1;
@@ -122,7 +144,7 @@ public class ASTVisitorImplTest {
 			reader.close();
 		} catch (Exception e) {
 			e.printStackTrace();
-		}
+		}*/
 		
 		
 		
