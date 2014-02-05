@@ -87,8 +87,8 @@ public class ASTVisitorImpl extends ASTVisitor {
 	@Override
 	public void endVisit(MethodDeclaration node) {
 		// TODO Auto-generated method stub
-		System.out.println(node.getName());
-		System.out.println(currentMethod.peek());
+		//System.out.println(node.getName());
+		//System.out.println(currentMethod.peek());
 		if (node.getName().toString().equals(currentMethod.peek())) {
 			currentMethod.pop();
 		}
@@ -137,11 +137,11 @@ public class ASTVisitorImpl extends ASTVisitor {
 		if (currentMethod.isEmpty() || !currentMethod.peek().equals(currentMethodName)) {
 			return super.visit(node);
 		}
-		System.out.println("currentmethod:" + currentMethodName);
+		//System.out.println("currentmethod:" + currentMethodName);
 		
 		boolean tmpflag = false; 
-		System.out.println(countflag + ": Simple:" + node.toString());
-		System.out.println(countflag + ": Simpleline:" + cu.getLineNumber(node.getStartPosition()));
+		//System.out.println(countflag + ": Simple:" + node.toString());
+		//System.out.println(countflag + ": Simpleline:" + cu.getLineNumber(node.getStartPosition()));
 		//System.out.println("SimpleParent:" + node.getParent().toString());
 		
 		if (!this.searchmode) { // false : get simplename
@@ -171,7 +171,7 @@ public class ASTVisitorImpl extends ASTVisitor {
 					// but parent is already in previous list. false;.
 					for(int j = 2; j < countflag; j++) {
 						if (arglist.get(j - 2).contains(node.toString())) {
-							System.out.println(node.toString());
+							//System.out.println(node.toString());
 							tmpflag = false;
 						}
 					}
@@ -187,7 +187,7 @@ public class ASTVisitorImpl extends ASTVisitor {
 			// but parent is already in previous list. false;.
 			for(int j = 2; j <= countflag; j++) {
 				if (arglist.get(j - 2).contains(node.toString())) {
-					System.out.println(node.toString());
+					//System.out.println(node.toString());
 					tmpflag = false;
 				}
 			}
@@ -196,17 +196,17 @@ public class ASTVisitorImpl extends ASTVisitor {
 		if (tmpflag == true) {
 			sntmpflag++;
 		}
-		System.out.println("allflag: " + tmpflag);
+		//System.out.println("allflag: " + tmpflag);
 
 		if (sntmpflag > 0) {
 			if (!this.searchmode) { // add number
 				if (linelist.get(cu.getLineNumber(node.getStartPosition())) == null) {
 					linelist.put(cu.getLineNumber(node.getStartPosition()), countflag - 1);
 					lineliststr.put(cu.getLineNumber(node.getStartPosition()), node.toString());
-					System.out.println(node.toString() +":a:" + cu.getLineNumber(node.getStartPosition()) +":"+ (countflag - 1));
+					//System.out.println(node.toString() +":a:" + cu.getLineNumber(node.getStartPosition()) +":"+ (countflag - 1));
 					
 				} else {
-					System.out.println(node.toString() +":b:" + cu.getLineNumber(node.getStartPosition()) +":"+ (countflag - 1));
+					//System.out.println(node.toString() +":b:" + cu.getLineNumber(node.getStartPosition()) +":"+ (countflag - 1));
 				}
 
 			} else { // add simplename
@@ -214,12 +214,12 @@ public class ASTVisitorImpl extends ASTVisitor {
 				if (!methodinvoname.contains(node.toString())) {
 					for(int j = 2; j < countflag; j++) {
 						if (arglist.get(j - 2).contains(node.toString())) {
-							System.out.println(node.toString());
+							//System.out.println(node.toString());
 							tmpflag = false;
 						}
 					}
 					if (tmpflag) {
-						System.out.println("not in :" + (countflag - 1) + ":" + node.toString());
+						//System.out.println("not in :" + (countflag - 1) + ":" + node.toString());
 						List<String> arglistcount = new ArrayList<String>();
 						arglistcount.add(node.toString());
 						
@@ -278,7 +278,7 @@ public class ASTVisitorImpl extends ASTVisitor {
 					}
 				}
 			}
-			System.out.println("assertnodep:" + node.getExpression());
+			//System.out.println("assertnodep:" + node.getExpression());
 			
 			assertFlag = true;
 		} else if (!(assertFlag || node.getName().toString().startsWith("assert"))) {
@@ -294,7 +294,7 @@ public class ASTVisitorImpl extends ASTVisitor {
 	@Override
 	public void endVisit(MethodInvocation node) {
 		// TODO Auto-generated method stub
-		if (assertFlag || node.getName().toString().startsWith("assert")) {
+		if (assertFlag && node.getName().toString().startsWith("assert")) {
 			assertFlag = false;
 		}
 		super.endVisit(node);
