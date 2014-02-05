@@ -293,7 +293,7 @@ public class SelectionView extends ViewPart {
 			ASTVisitorImpl astvis = new ASTVisitorImpl(unitp);
 			String methodname = methodlist.get(j);
 			str.append(methodname + "\n");
-			System.out.println(methodname + "\n");
+			//System.out.println(methodname + "\n");
 			
 			astvis.setCurrentMethod(methodname);
 			astvis.setHashMap(linelistall);
