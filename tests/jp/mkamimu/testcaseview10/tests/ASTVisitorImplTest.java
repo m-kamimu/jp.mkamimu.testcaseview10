@@ -14,6 +14,7 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTParser;
 import org.eclipse.jdt.core.dom.CompilationUnit;
+import org.eclipse.jdt.core.dom.Statement;
 import org.junit.Test;
 
 public class ASTVisitorImplTest {
@@ -46,11 +47,11 @@ public class ASTVisitorImplTest {
 		unitp.accept(astmvis);
 		List<String> methodlist = astmvis.getMethodDeclarationList();
 
-		HashMap<Integer, Integer> linelistall = new HashMap<Integer, Integer>();
-		HashMap<Integer, String> lineliststrall = new HashMap<Integer, String>();
+		HashMap<Statement, Integer> linelistall = new HashMap<Statement, Integer>();
+		HashMap<Statement, String> lineliststrall = new HashMap<Statement, String>();
 		
 		for (int j = 0; j < methodlist.size(); j++) {
-			ASTVisitorImpl astvis = new ASTVisitorImpl(unitp);
+			ASTVisitorImpl astvis = new ASTVisitorImpl();
 			String methodname = methodlist.get(j);
 			//str.append(methodname + "\n");
 			System.out.println(methodname + "\n");
@@ -79,7 +80,7 @@ public class ASTVisitorImplTest {
 			linelistall = astvis.getHashMap();
 		}
 
-		for(Integer keys : linelistall.keySet()) {
+		for(Statement keys : linelistall.keySet()) {
 			System.out.println(keys +":"+ linelistall.get(keys));
 		}
 

@@ -5,20 +5,24 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Stack;
 
+import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.ASTVisitor;
-import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.MethodInvocation;
 import org.eclipse.jdt.core.dom.SimpleName;
+import org.eclipse.jdt.core.dom.Statement;
 
 public class ASTVisitorImpl extends ASTVisitor {
 	
-	private CompilationUnit cu;
+	//private CompilationUnit cu;
 	private String currentMethodName = null;
 
 	// line, number
-	private HashMap<Integer, Integer> linelist = null;
-	private HashMap<Integer, String> lineliststr = null;
+	//private HashMap<Integer, Integer> linelist = null;
+	//private HashMap<Integer, String> lineliststr = null;
+	
+	private HashMap<Statement, Integer> stlist = null;
+	private HashMap<Statement, String> stliststr = null;	
 	
 	private List<List<String>> arglist = new ArrayList<List<String>>();
 	private List<String> assertarglist = new ArrayList<String>();
@@ -30,6 +34,23 @@ public class ASTVisitorImpl extends ASTVisitor {
 	public void setSearchmode(boolean searchmode) {
 		this.searchmode = searchmode;
 	}
+	
+	public void setHashMap(HashMap<Statement, Integer> stlist) {
+		this.stlist = stlist;
+	}
+	public HashMap<Statement, Integer> getHashMap() {
+		return this.stlist;
+	}
+	
+	public void setHashMapstr(HashMap<Statement, String> stliststr) {
+		this.stliststr = stliststr;
+	}
+	public HashMap<Statement, String> getHashMapstr() {
+		return this.stliststr;
+	}
+
+	
+	/*
 	public void setHashMap(HashMap<Integer, Integer> linelist) {
 		this.linelist = linelist;
 	}
@@ -43,6 +64,7 @@ public class ASTVisitorImpl extends ASTVisitor {
 	public HashMap<Integer, String> getHashMapstr() {
 		return this.lineliststr;
 	}
+	*/
 
 	
 	public boolean needAnalysis() {
@@ -61,8 +83,8 @@ public class ASTVisitorImpl extends ASTVisitor {
 		countflag++;
 	}
 	
-	public ASTVisitorImpl(CompilationUnit cu) {
-		this.cu = cu;
+	public ASTVisitorImpl() {
+		//this.cu = cu;
 	}
 	
 	public void setCurrentMethod(String currentMethodName) {
@@ -180,7 +202,8 @@ public class ASTVisitorImpl extends ASTVisitor {
 			}
 		} else { // true: get linenumber  -> add simplename
 			// line already has number
-			if (linelist.get(cu.getLineNumber(node.getStartPosition())) != null) {
+			if (getStatementNode((ASTNode)node) != null && stlist.get(getStatementNode((ASTNode)node)) != null) {
+			//if (linelist.get(cu.getLineNumber(node.getStartPosition())) != null) {
 				tmpflag = true;
 			} 
 
@@ -200,9 +223,12 @@ public class ASTVisitorImpl extends ASTVisitor {
 
 		if (sntmpflag > 0) {
 			if (!this.searchmode) { // add number
-				if (linelist.get(cu.getLineNumber(node.getStartPosition())) == null) {
-					linelist.put(cu.getLineNumber(node.getStartPosition()), countflag - 1);
-					lineliststr.put(cu.getLineNumber(node.getStartPosition()), node.toString());
+				if (getStatementNode((ASTNode)node) != null && stlist.get(getStatementNode((ASTNode)node)) == null) {
+				//if (linelist.get(cu.getLineNumber(node.getStartPosition())) == null) {
+					stlist.put(getStatementNode((ASTNode)node), countflag - 1);
+					//linelist.put(cu.getLineNumber(node.getStartPosition()), countflag - 1);
+					stliststr.put(getStatementNode((ASTNode)node), node.toString());
+					//lineliststr.put(cu.getLineNumber(node.getStartPosition()), node.toString());
 					//System.out.println(node.toString() +":a:" + cu.getLineNumber(node.getStartPosition()) +":"+ (countflag - 1));
 					
 				} else {
@@ -242,6 +268,18 @@ public class ASTVisitorImpl extends ASTVisitor {
 		if (sntmpflag > 0) {
 			sntmpflag--;
 		}
+	}
+	
+	private Statement getStatementNode(ASTNode node) {
+		ASTNode tmpnode = node.getParent();
+		while(tmpnode != null) {
+			if (tmpnode instanceof Statement) {
+				return (Statement) tmpnode; 
+			} else {
+				tmpnode = tmpnode.getParent();
+			}
+		}
+		return (Statement)tmpnode;
 	}
 	
 	

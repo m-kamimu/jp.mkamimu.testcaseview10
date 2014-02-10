@@ -19,6 +19,7 @@ import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTParser;
 import org.eclipse.jdt.core.dom.CompilationUnit;
+import org.eclipse.jdt.core.dom.Statement;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.Document;
 import org.eclipse.jface.text.IMarkSelection;
@@ -29,6 +30,9 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.StyledText;
+import org.eclipse.swt.graphics.Font;
+import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.IWorkbenchPart;
@@ -156,6 +160,9 @@ public class SelectionView extends ViewPart {
 		textviewer = new TextViewer(pagebook, SWT.H_SCROLL | SWT.V_SCROLL);
 		//textviewer.setEditable(false);
 		textviewer.setEditable(true);
+		StyledText textControl = textviewer.getTextWidget();
+		Font font = new Font(textControl.getDisplay(), new FontData("Courier",10, SWT.SIMPLE)); 
+		textControl.setFont(font);
 		
 		getSite().getWorkbenchWindow().getSelectionService().addSelectionListener(listener);
 	}
@@ -286,18 +293,18 @@ public class SelectionView extends ViewPart {
 		unitp.accept(astmvis);
 		List<String> methodlist = astmvis.getMethodDeclarationList();
 
-		HashMap<Integer, Integer> linelistall = new HashMap<Integer, Integer>();
-		HashMap<Integer, String> lineliststrall = new HashMap<Integer, String>();
+		HashMap<Statement, Integer> stlistall = new HashMap<Statement, Integer>();
+		HashMap<Statement, String> stliststrall = new HashMap<Statement, String>();
 		
 		for (int j = 0; j < methodlist.size(); j++) {
-			ASTVisitorImpl astvis = new ASTVisitorImpl(unitp);
+			ASTVisitorImpl astvis = new ASTVisitorImpl();
 			String methodname = methodlist.get(j);
 			str.append(methodname + "\n");
 			//System.out.println(methodname + "\n");
 			
 			astvis.setCurrentMethod(methodname);
-			astvis.setHashMap(linelistall);
-			astvis.setHashMapstr(lineliststrall);
+			astvis.setHashMap(stlistall);
+			astvis.setHashMapstr(stliststrall);
 			// for assert
 			astvis.setSearchmode(false);
 			unitp.accept(astvis);
@@ -324,8 +331,8 @@ public class SelectionView extends ViewPart {
 			//str.add(astvis.printassertwholelist());
 			//str.add("\n");
 			//str.add(astvis.printwholelist());
-			linelistall = astvis.getHashMap();
-			lineliststrall = astvis.getHashMapstr();
+			stlistall = astvis.getHashMap();
+			stliststrall = astvis.getHashMapstr();
 
 		}
 		
@@ -333,12 +340,19 @@ public class SelectionView extends ViewPart {
 			//System.out.println(keys +":"+ linelistall.get(keys));
 		//}
 		
+		if (stlistall != null && stliststrall != null) {
+		ASTStatementVisitorImpl aststvis = new ASTStatementVisitorImpl(stlistall, stliststrall);
+		unitp.accept(aststvis);
+		str.append(aststvis.getString());
+		}
+		
+		/*
 		try {
 			BufferedReader reader = new BufferedReader(new StringReader(unit.getSource()));
 			int l = 1;
 			String line;
 			while((line = reader.readLine()) != null) {
-				Integer linenum = linelistall.get(l);
+				Integer linenum = stlistall.get(l);
 				//String linetoken = lineliststrall.get(l);
 				
 				if (linenum == null) {
@@ -353,7 +367,7 @@ public class SelectionView extends ViewPart {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-		}
+		}*/
 			
 		
 		return str.toString();
