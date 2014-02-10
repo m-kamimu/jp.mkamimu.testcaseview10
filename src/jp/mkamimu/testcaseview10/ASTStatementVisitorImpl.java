@@ -1,6 +1,8 @@
 package jp.mkamimu.testcaseview10;
 
 import java.util.HashMap;
+import java.util.Stack;
+
 import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.AssertStatement;
 import org.eclipse.jdt.core.dom.Block;
@@ -14,6 +16,7 @@ import org.eclipse.jdt.core.dom.ExpressionStatement;
 import org.eclipse.jdt.core.dom.ForStatement;
 import org.eclipse.jdt.core.dom.IfStatement;
 import org.eclipse.jdt.core.dom.LabeledStatement;
+import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.ReturnStatement;
 import org.eclipse.jdt.core.dom.Statement;
 import org.eclipse.jdt.core.dom.SuperConstructorInvocation;
@@ -30,7 +33,7 @@ public class ASTStatementVisitorImpl extends ASTVisitor {
 	private HashMap<Statement, Integer> stlist = null;
 	private HashMap<Statement, String> stliststr = null;
 	private StringBuffer str = new StringBuffer();
-	
+	private String currentMethodName = null;
 	
 	public ASTStatementVisitorImpl(HashMap<Statement, Integer> stlist, HashMap<Statement, String> stliststr) {
 		// TODO Auto-generated constructor stub
@@ -42,8 +45,46 @@ public class ASTStatementVisitorImpl extends ASTVisitor {
 		return str.toString();
 	}
 	
+	public void clearString() {
+		str = new StringBuffer();
+	}
+	
+	public void setCurrentMethod(String currentMethodName) {
+		this.currentMethodName = currentMethodName;
+	}
+	
+	Stack<String> currentMethod = new Stack<String>();
+	
+	/* (non-Javadoc)
+	 * @see org.eclipse.jdt.core.dom.ASTVisitor#visit(org.eclipse.jdt.core.dom.MethodDeclaration)
+	 */
+	@Override
+	public boolean visit(MethodDeclaration node) {
+		// TODO Auto-generated method stub
+		currentMethod.push(node.getName().toString());
+		return super.visit(node);
+	}
+	
+	/* (non-Javadoc)
+	 * @see org.eclipse.jdt.core.dom.ASTVisitor#endVisit(org.eclipse.jdt.core.dom.MethodDeclaration)
+	 */
+	@Override
+	public void endVisit(MethodDeclaration node) {
+		// TODO Auto-generated method stub
+		//System.out.println(node.getName());
+		//System.out.println(currentMethod.peek());
+		if (node.getName().toString().equals(currentMethod.peek())) {
+			currentMethod.pop();
+		}
+		super.endVisit(node);
+	}
+
 	
 	private void visit(Statement node) {
+		if (currentMethod.isEmpty() || !currentMethod.peek().equals(currentMethodName)) {
+			return;
+		}
+		
 		//System.out.println(node.toString());
 		try {
 			if (node != null && this.stlist != null) {
@@ -75,14 +116,12 @@ public class ASTStatementVisitorImpl extends ASTVisitor {
 		return super.visit(node);
 	}
 	
-	/*
 	public boolean visit(Block node) {
 		if (node instanceof Statement) {
 			visit((Statement) node);
 		}
 		return super.visit(node);
 	}
-	*/
 
 	public boolean visit(BreakStatement node) {
 		if (node instanceof Statement) {

@@ -334,17 +334,19 @@ public class SelectionView extends ViewPart {
 			stlistall = astvis.getHashMap();
 			stliststrall = astvis.getHashMapstr();
 
+			if (stlistall != null && stliststrall != null) {
+				ASTStatementVisitorImpl aststvis = new ASTStatementVisitorImpl(stlistall, stliststrall);
+				aststvis.setCurrentMethod(methodname);
+				unitp.accept(aststvis);
+				str.append(aststvis.getString());
+				aststvis.clearString();
+			}
 		}
 		
 		//for(Integer keys : linelistall.keySet()) {
 			//System.out.println(keys +":"+ linelistall.get(keys));
 		//}
 		
-		if (stlistall != null && stliststrall != null) {
-		ASTStatementVisitorImpl aststvis = new ASTStatementVisitorImpl(stlistall, stliststrall);
-		unitp.accept(aststvis);
-		str.append(aststvis.getString());
-		}
 		
 		/*
 		try {
