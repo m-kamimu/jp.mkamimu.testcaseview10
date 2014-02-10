@@ -152,7 +152,7 @@ public class ASTVisitorImpl extends ASTVisitor {
 		}
 		
 		if (assertFlag) {
-			assertarglist.add(node.toString());
+			assertarglist.addAll(splitCamelCase(node.toString()));
 		}
 		//System.out.println(node);
 		
@@ -165,34 +165,40 @@ public class ASTVisitorImpl extends ASTVisitor {
 		//System.out.println(countflag + ": Simple:" + node.toString());
 		//System.out.println(countflag + ": Simpleline:" + cu.getLineNumber(node.getStartPosition()));
 		//System.out.println("SimpleParent:" + node.getParent().toString());
+		String worktmp = null;
+		
 		
 		if (!this.searchmode) { // false : get simplename
 			if (countflag > 0) {
 				if (countflag == 1) {
 					// node is equal to assert arg
-					if (assertarglist.contains(node.toString())) {
+					if (contains(splitCamelCase(node.toString()), assertarglist) != null) {
 						tmpflag = true;
+						worktmp = contains(splitCamelCase(node.toString()), assertarglist);
 					}
 					// node parent is equal to assert arg
 					if (node.getParent() != null 
-							&& assertarglist.contains(node.getParent().toString())) {
+							&& contains(splitCamelCase(node.getParent().toString()), assertarglist) != null) {
 						tmpflag = true;
+						worktmp = contains(splitCamelCase(node.getParent().toString()), assertarglist); 
 					}
 					
 				} else if (arglist.size() > countflag - 2) {
 					// node is in previous list.
-					if (arglist.get(countflag - 2).contains(node.toString())) {
+					if (contains(splitCamelCase(node.toString()), arglist.get(countflag - 2)) != null) {
 						tmpflag = true;
+						worktmp = contains(splitCamelCase(node.toString()), arglist.get(countflag - 2));
 					}
 					// node parent is in previous list
 					if (node.getParent() != null 
-							&& arglist.get(countflag - 2).contains(node.getParent().toString())) {
+							&& contains(splitCamelCase(node.getParent().toString()), arglist.get(countflag - 2))  != null) {
 						tmpflag = true;
+						worktmp = contains(splitCamelCase(node.getParent().toString()), arglist.get(countflag - 2));
 					}
 	
 					// but parent is already in previous list. false;.
 					for(int j = 2; j < countflag; j++) {
-						if (arglist.get(j - 2).contains(node.toString())) {
+						if (contains(splitCamelCase(node.toString()), arglist.get(j - 2)) != null) {
 							//System.out.println(node.toString());
 							tmpflag = false;
 						}
@@ -209,7 +215,7 @@ public class ASTVisitorImpl extends ASTVisitor {
 
 			// but parent is already in previous list. false;.
 			for(int j = 2; j <= countflag; j++) {
-				if (arglist.get(j - 2).contains(node.toString())) {
+				if (contains(splitCamelCase(node.toString()), arglist.get(j - 2)) != null) {
 					//System.out.println(node.toString());
 					tmpflag = false;
 				}
@@ -227,7 +233,16 @@ public class ASTVisitorImpl extends ASTVisitor {
 				//if (linelist.get(cu.getLineNumber(node.getStartPosition())) == null) {
 					stlist.put(getStatementNode((ASTNode)node), countflag - 1);
 					//linelist.put(cu.getLineNumber(node.getStartPosition()), countflag - 1);
-					stliststr.put(getStatementNode((ASTNode)node), node.toString());
+					if (worktmp != null) {
+						stliststr.put(getStatementNode((ASTNode)node), worktmp);
+					}
+					/*
+					if (contains(splitCamelCase(node.toString()), assertarglist) != null) {
+						stliststr.put(getStatementNode((ASTNode)node), contains(splitCamelCase(node.toString()), assertarglist));
+					} else if (countflag >= 1 && arglist.size() > countflag - 1) {
+						stliststr.put(getStatementNode((ASTNode)node), contains(splitCamelCase(node.toString()), arglist.get(countflag - 1)));
+					}
+					*/
 					//lineliststr.put(cu.getLineNumber(node.getStartPosition()), node.toString());
 					//System.out.println(node.toString() +":a:" + cu.getLineNumber(node.getStartPosition()) +":"+ (countflag - 1));
 					
@@ -239,7 +254,7 @@ public class ASTVisitorImpl extends ASTVisitor {
 				
 				if (!methodinvoname.contains(node.toString())) {
 					for(int j = 2; j < countflag; j++) {
-						if (arglist.get(j - 2).contains(node.toString())) {
+						if (contains(splitCamelCase(node.toString()), arglist.get(j - 2)) != null) {
 							//System.out.println(node.toString());
 							tmpflag = false;
 						}
@@ -247,7 +262,7 @@ public class ASTVisitorImpl extends ASTVisitor {
 					if (tmpflag) {
 						//System.out.println("not in :" + (countflag - 1) + ":" + node.toString());
 						List<String> arglistcount = new ArrayList<String>();
-						arglistcount.add(node.toString());
+						arglistcount.addAll(splitCamelCase(node.toString()));
 						
 						if (arglist.size() > countflag - 1 && countflag > 0) {
 							List<String> tmparglistcount = arglist.get(countflag - 1);
@@ -302,17 +317,17 @@ public class ASTVisitorImpl extends ASTVisitor {
 			
 			for(int i = 0; i < node.arguments().size(); i++) {
 				if (!node.arguments().get(i).toString().equals("null")) {
-					assertarglist.add(node.arguments().get(i).toString());
+					assertarglist.addAll(splitCamelCase(node.arguments().get(i).toString()));
 				}
 			}
 			if (node.getExpression() != null) {
-				assertarglist.add(node.getExpression().toString());
+				assertarglist.addAll(splitCamelCase(node.getExpression().toString()));
 				if (node.getExpression().toString().contains(".")) {
 					String tmp = node.getExpression().toString();
 					while(tmp.indexOf(".") > 0) {
 						tmp = tmp.substring(0, tmp.indexOf("."));
 						//System.out.println("tmp:" + tmp);
-						assertarglist.add(tmp);
+						assertarglist.addAll(splitCamelCase(tmp));
 					}
 				}
 			}
@@ -339,4 +354,33 @@ public class ASTVisitorImpl extends ASTVisitor {
 	}
 	
 	
+	private static List<String> splitCamelCase(String s) {
+	   String stmp = s.replaceAll(
+	      String.format("%s|%s|%s",
+	         "(?<=[A-Z])(?=[A-Z][a-z])",
+	         "(?<=[^A-Z])(?=[A-Z])",
+	         "(?<=[A-Za-z])(?=[^A-Za-z])"
+	      ),
+	      " "
+	   );
+	   String str[] = stmp.split(" ");
+	   List<String> strlist = new ArrayList<String>();
+	   for(int i = 0; i < str.length;i++) {
+		   if (!str[i].equals("()")) {
+			   strlist.add(str[i]);
+		   }
+	   }
+	   return strlist;
+	}
+	
+	private static String contains(List<String> wordlist,  List<String> targetlist) {
+		for(int i = 0; i < wordlist.size(); i++) {
+			if (targetlist.contains(wordlist.get(i))) {
+				return wordlist.get(i);
+			}
+		}
+		return null;
+	}
+	
+		
 }
