@@ -45,16 +45,22 @@ public class ASTStatementVisitorImpl extends ASTVisitor {
 	
 	private void visit(Statement node) {
 		//System.out.println(node.toString());
-		if (node != null && this.stlist != null) {
-			int l = this.stlist.get(node);
-			String lstr = this.stliststr.get(node);
-			String line = node.toString();
-			//System.out.println(l + "::								"+line);
-			//str.append(l + "::								"+line+"\n");
-			System.out.printf("%2d:%-20s:\t%s", l, lstr, line);
-			//System.out.print(l + ":" + lstr + "			:						"+line);
-			str.append(String.format("%2d:%-20s:\t%s", l, lstr, line));
-			//str.append(l + ":" + lstr + "			:						"+line);
+		try {
+			if (node != null && this.stlist != null) {
+				int l = this.stlist.get(node);
+				String lstr = this.stliststr.get(node);
+				String line = node.toString();
+				//System.out.println(l + "::								"+line);
+				//str.append(l + "::								"+line+"\n");
+				System.out.printf("%2d:%-20s:\t%s", l, lstr, line);
+				//System.out.print(l + ":" + lstr + "			:						"+line);
+				str.append(String.format("%2d:%-20s:\t%s", l, lstr, line));
+				//str.append(l + ":" + lstr + "			:						"+line);
+			}
+		} catch (NullPointerException e) {
+			//e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 	
@@ -183,14 +189,12 @@ public class ASTStatementVisitorImpl extends ASTVisitor {
 		return super.visit(node);
 	}
 
-	/*
 	public boolean visit(TryStatement node) {
 		if (node instanceof Statement) {
 			visit((Statement) node);
 		}
 		return super.visit(node);
 	}
-	*/
 
 	public boolean visit(TypeDeclarationStatement node) {
 		if (node instanceof Statement) {
