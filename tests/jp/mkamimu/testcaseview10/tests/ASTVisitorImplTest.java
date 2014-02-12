@@ -83,7 +83,12 @@ public class ASTVisitorImplTest {
 		for(Statement keys : linelistall.keySet()) {
 			System.out.println(keys +":"+ linelistall.get(keys));
 		}
+		
+		
 
+		
+
+		/*
 		int l = 1;
 		try {
 			BufferedReader reader = new BufferedReader(new FileReader("testdata/ASTRewriteSnippet.java"));
@@ -267,9 +272,9 @@ public class ASTVisitorImplTest {
 			
 			System.out.println(m +","+elineliststrall.get(m)+"," +lineliststrall.get(m));
 			assertEquals(elineliststrall.get(m), lineliststrall.get(m));
-		}
+		}*/
 		
-		//fail("Not yet implemented"); // TODO
+		fail("Not yet implemented"); // TODO
 	}
 
 }

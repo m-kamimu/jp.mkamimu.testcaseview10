@@ -99,6 +99,9 @@ public class ASTStatementVisitorImpl extends ASTVisitor {
 				//str.append(l + ":" + lstr + "			:						"+line);
 			}
 		} catch (NullPointerException e) {
+			String line = node.toString();
+			System.out.printf("%2d:%-20s:\t%s", -1, "", line);
+			str.append(String.format("%2d:%-20s:\t%s", -1, "", line));
 			//e.printStackTrace();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -116,12 +119,14 @@ public class ASTStatementVisitorImpl extends ASTVisitor {
 		return super.visit(node);
 	}
 	
+	/*
 	public boolean visit(Block node) {
 		if (node instanceof Statement) {
 			visit((Statement) node);
 		}
 		return super.visit(node);
 	}
+	*/
 
 	public boolean visit(BreakStatement node) {
 		if (node instanceof Statement) {
