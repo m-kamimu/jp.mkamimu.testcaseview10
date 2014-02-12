@@ -149,12 +149,14 @@ public class ASTStatementVisitorImpl extends ASTVisitor {
 		return super.visit(node);
 	}
 
+	/*
 	public boolean visit(DoStatement node) {
 		if (node instanceof Statement) {
 			visit((Statement) node);
 		}
 		return super.visit(node);
 	}
+	*/
 
 	public boolean visit(EmptyStatement node) {
 		if (node instanceof Statement) {
@@ -170,6 +172,7 @@ public class ASTStatementVisitorImpl extends ASTVisitor {
 		return super.visit(node);
 	}
 
+	/*
 	public boolean visit(ForStatement node) {
 		if (node instanceof Statement) {
 			visit((Statement) node);
@@ -182,7 +185,7 @@ public class ASTStatementVisitorImpl extends ASTVisitor {
 			visit((Statement) node);
 		}
 		return super.visit(node);
-	}
+	}*/
 
 	public boolean visit(LabeledStatement node) {
 		if (node instanceof Statement) {
@@ -233,12 +236,14 @@ public class ASTStatementVisitorImpl extends ASTVisitor {
 		return super.visit(node);
 	}
 
+	/*
 	public boolean visit(TryStatement node) {
 		if (node instanceof Statement) {
 			visit((Statement) node);
 		}
 		return super.visit(node);
 	}
+	*/
 
 	public boolean visit(TypeDeclarationStatement node) {
 		if (node instanceof Statement) {
