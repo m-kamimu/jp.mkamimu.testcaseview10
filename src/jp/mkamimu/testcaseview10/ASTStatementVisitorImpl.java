@@ -40,6 +40,14 @@ public class ASTStatementVisitorImpl extends ASTVisitor {
 		this.level = level;
 	}
 	
+	public void setLevelbyRate(double rate) {
+		int max = 0;
+		for(Statement keys: stlist.keySet()) {
+			int tmp = stlist.get(keys);
+			if (tmp > max) max = tmp;
+		}
+		level = new Double(max * rate).intValue();
+	}
 	
 	public ASTStatementVisitorImpl(HashMap<Statement, Integer> stlist, HashMap<Statement, String> stliststr) {
 		// TODO Auto-generated constructor stub
@@ -108,7 +116,7 @@ public class ASTStatementVisitorImpl extends ASTVisitor {
 			}
 		} catch (NullPointerException e) {
 			String line = node.toString();
-			if (this.level > -1) {
+			if (this.level == -1) {
 				System.out.printf("%2d:%-20s:\t%s", -1, "", line);
 				str.append(String.format("%2d:%-20s:\t%s", -1, "", line));
 			}
