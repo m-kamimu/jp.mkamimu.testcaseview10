@@ -147,9 +147,11 @@ public class ASTVisitorImpl extends ASTVisitor {
 			return super.visit(node); // starts from upper case 
 		}
 		
+		/*
 		if (methodinvoname.contains(node.toString())) {
 			return super.visit(node);
 		}
+		*/
 		
 		if (assertFlag) {
 			assertarglist.addAll(splitCamelCase(node.toString()));
@@ -206,8 +208,8 @@ public class ASTVisitorImpl extends ASTVisitor {
 					
 				}
 			}
-		} else { // true: get linenumber  -> add simplename
-			// line already has number
+		} else { // true: get Statement  -> add simplename
+			// Statement already has number
 			if (getStatementNode((ASTNode)node) != null && stlist.get(getStatementNode((ASTNode)node)) != null) {
 			//if (linelist.get(cu.getLineNumber(node.getStartPosition())) != null) {
 				tmpflag = true;

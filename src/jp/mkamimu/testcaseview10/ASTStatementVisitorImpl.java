@@ -34,6 +34,12 @@ public class ASTStatementVisitorImpl extends ASTVisitor {
 	private HashMap<Statement, String> stliststr = null;
 	private StringBuffer str = new StringBuffer();
 	private String currentMethodName = null;
+	private int level = -1;
+	
+	public void setLevel(int level) {
+		this.level = level;
+	}
+	
 	
 	public ASTStatementVisitorImpl(HashMap<Statement, Integer> stlist, HashMap<Statement, String> stliststr) {
 		// TODO Auto-generated constructor stub
@@ -93,15 +99,19 @@ public class ASTStatementVisitorImpl extends ASTVisitor {
 				String line = node.toString();
 				//System.out.println(l + "::								"+line);
 				//str.append(l + "::								"+line+"\n");
-				System.out.printf("%2d:%-20s:\t%s", l, lstr, line);
-				//System.out.print(l + ":" + lstr + "			:						"+line);
-				str.append(String.format("%2d:%-20s:\t%s", l, lstr, line));
-				//str.append(l + ":" + lstr + "			:						"+line);
+				if (l <= this.level) {
+					System.out.printf("%2d:%-20s:\t%s", l, lstr, line);
+					//System.out.print(l + ":" + lstr + "			:						"+line);
+					str.append(String.format("%2d:%-20s:\t%s", l, lstr, line));
+					//str.append(l + ":" + lstr + "			:						"+line);
+				}
 			}
 		} catch (NullPointerException e) {
 			String line = node.toString();
-			System.out.printf("%2d:%-20s:\t%s", -1, "", line);
-			str.append(String.format("%2d:%-20s:\t%s", -1, "", line));
+			if (this.level > -1) {
+				System.out.printf("%2d:%-20s:\t%s", -1, "", line);
+				str.append(String.format("%2d:%-20s:\t%s", -1, "", line));
+			}
 			//e.printStackTrace();
 		} catch (Exception e) {
 			e.printStackTrace();

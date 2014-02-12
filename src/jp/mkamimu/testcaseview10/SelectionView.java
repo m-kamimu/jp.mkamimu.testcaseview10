@@ -337,6 +337,7 @@ public class SelectionView extends ViewPart {
 			if (stlistall != null && stliststrall != null) {
 				ASTStatementVisitorImpl aststvis = new ASTStatementVisitorImpl(stlistall, stliststrall);
 				aststvis.setCurrentMethod(methodname);
+				aststvis.setLevel(2);
 				unitp.accept(aststvis);
 				str.append(aststvis.getString());
 				aststvis.clearString();
