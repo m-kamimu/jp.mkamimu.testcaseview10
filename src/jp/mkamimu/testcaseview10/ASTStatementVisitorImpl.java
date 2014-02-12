@@ -259,12 +259,14 @@ public class ASTStatementVisitorImpl extends ASTVisitor {
 		return super.visit(node);
 	}
 	
+	/*
 	public boolean visit(WhileStatement node) {
 		if (node instanceof Statement) {
 			visit((Statement) node);
 		}
 		return super.visit(node);
 	}
+	*/
 
 	public boolean visit(EnhancedForStatement node) {
 		if (node instanceof Statement) {
