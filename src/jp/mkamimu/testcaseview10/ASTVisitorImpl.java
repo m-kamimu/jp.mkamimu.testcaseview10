@@ -147,11 +147,11 @@ public class ASTVisitorImpl extends ASTVisitor {
 			return super.visit(node); // starts from upper case 
 		}
 		
-		/*
+		
 		if (methodinvoname.contains(node.toString())) {
 			return super.visit(node);
 		}
-		*/
+		
 		
 		if (assertFlag) {
 			assertarglist.addAll(splitCamelCase(node.toString()));
@@ -237,7 +237,7 @@ public class ASTVisitorImpl extends ASTVisitor {
 					//linelist.put(cu.getLineNumber(node.getStartPosition()), countflag - 1);
 					if (worktmp != null && !worktmp.equals("")) {
 						stliststr.put(getStatementNode((ASTNode)node), worktmp);
-					} else {
+					}/* else {
 						System.out.println("worktmpnull:" + node.toString());
 					}
 					/*
