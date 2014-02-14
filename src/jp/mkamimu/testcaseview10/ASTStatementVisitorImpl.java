@@ -1,6 +1,8 @@
 package jp.mkamimu.testcaseview10;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Stack;
 
 import org.eclipse.jdt.core.dom.ASTVisitor;
@@ -32,6 +34,8 @@ import org.eclipse.jdt.core.dom.WhileStatement;
 public class ASTStatementVisitorImpl extends ASTVisitor {
 	private HashMap<Statement, Integer> stlist = null;
 	private HashMap<Statement, String> stliststr = null;
+	private List<StrData> strlist = new ArrayList<StrData>();
+	
 	private StringBuffer str = new StringBuffer();
 	private String currentMethodName = null;
 	private int level = -1;
@@ -40,6 +44,10 @@ public class ASTStatementVisitorImpl extends ASTVisitor {
 		this.level = level;
 	}
 	
+	public int getLevel() {
+		return level;
+	}
+
 	public void setLevelbyRate(double rate) {
 		int max = 0;
 		for(Statement keys: stlist.keySet()) {
@@ -63,6 +71,10 @@ public class ASTStatementVisitorImpl extends ASTVisitor {
 		str = new StringBuffer();
 	}
 	
+	public List<StrData> getStrlist() {
+		return strlist;
+	}
+
 	public void setCurrentMethod(String currentMethodName) {
 		this.currentMethodName = currentMethodName;
 	}
@@ -112,6 +124,11 @@ public class ASTStatementVisitorImpl extends ASTVisitor {
 					//System.out.print(l + ":" + lstr + "			:						"+line);
 					str.append(String.format("%2d:%-20s:\t%s", l, lstr, line));
 					//str.append(l + ":" + lstr + "			:						"+line);
+					StrData strd = new StrData();
+					strd.setL(l);
+					strd.setLine(line);
+					strd.setLstr(lstr);
+					strlist.add(strd);
 				}
 			}
 		} catch (NullPointerException e) {
@@ -119,6 +136,13 @@ public class ASTStatementVisitorImpl extends ASTVisitor {
 			if (this.level == -1) {
 				System.out.printf("%2d:%-20s:\t%s", -1, "", line);
 				str.append(String.format("%2d:%-20s:\t%s", -1, "", line));
+				
+				StrData strd = new StrData();
+				strd.setL(-1);
+				strd.setLine(line);
+				strd.setLstr("");
+				strlist.add(strd);
+
 			}
 			//e.printStackTrace();
 		} catch (Exception e) {

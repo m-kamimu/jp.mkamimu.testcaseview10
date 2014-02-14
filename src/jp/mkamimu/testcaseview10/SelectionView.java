@@ -341,7 +341,19 @@ public class SelectionView extends ViewPart {
 				aststvis.setLevelbyRate(0.5);
 				unitp.accept(aststvis);
 				str.append(aststvis.getString());
+				
+				str.append("-----------------------------------\n");
+				aststvis = new ASTStatementVisitorImpl(stlistall, stliststrall);
+				aststvis.setCurrentMethod(methodname);
+				aststvis.setLevelbyRate(1.0);
+				unitp.accept(aststvis);
+				str.append(aststvis.getString());
+				str.append("-----------------------------------\n");
+				
+				str.append(createLastAssert(aststvis.getStrlist(), aststvis.getLevel()));
+				
 				aststvis.clearString();
+				
 			}
 		}
 		
@@ -385,5 +397,35 @@ public class SelectionView extends ViewPart {
 	public void setCurrentProject(String currentProject) {
 		this.currentProject = currentProject;
 	}
+	
+	private String createLastAssert(List<StrData> strdlist , int level) {
+		StringBuffer sb = new StringBuffer();
+		int current = 0;
+		String currentstr = null;
+		
+		boolean writeflag = false;
+		for(int i = strdlist.size() - 1; i >= 0; i--) {
+			int l = strdlist.get(i).getL();
+			String line = strdlist.get(i).getLine();
+			String lstr = strdlist.get(i).getLstr();
+			if (line.contains("assert")) {
+				writeflag = true;
+				sb.insert(0,String.format("%2d:%-20s:\t%s", l, lstr, line));
+				current = l;
+				currentstr = lstr;
+			} else if (writeflag) {
+				if (current < l || !currentstr.equals(lstr)) {
+					sb.insert(0,String.format("%2d:%-20s:\t%s", l, lstr, line));
+					current = l;
+					currentstr = lstr;
+				}
+			}
+			if (level > 0 && current >= level) {
+				writeflag = false;
+			}
+		}
+		return sb.toString();
+	}
+	
 	
 }
