@@ -147,10 +147,10 @@ public class ASTVisitorImpl extends ASTVisitor {
 			return super.visit(node); // starts from upper case 
 		}
 		
-		
+		/*
 		if (methodinvoname.contains(node.toString())) {
 			return super.visit(node);
-		}
+		}*/
 		
 		
 		if (assertFlag) {
@@ -205,9 +205,15 @@ public class ASTVisitorImpl extends ASTVisitor {
 							tmpflag = false;
 						}
 					}
+					
 				}
 			}
 		} else { // true: get Statement  -> add simplename
+			// exclude method info
+			if (methodinvoname.contains(node.toString())) {
+				return super.visit(node);
+			}
+			
 			// Statement already has number
 			if (!tmpflag && getStatementNode((ASTNode)node) != null && stlist.get(getStatementNode((ASTNode)node)) != null) {
 			//if (linelist.get(cu.getLineNumber(node.getStartPosition())) != null) {
@@ -231,32 +237,34 @@ public class ASTVisitorImpl extends ASTVisitor {
 
 		if (sntmpflag > 0) {
 			if (!this.searchmode) { // add number
-				if (getStatementNode((ASTNode)node) != null && stlist.get(getStatementNode((ASTNode)node)) == null) {
-				//if (linelist.get(cu.getLineNumber(node.getStartPosition())) == null) {
-					stlist.put(getStatementNode((ASTNode)node), countflag - 1);
-					//linelist.put(cu.getLineNumber(node.getStartPosition()), countflag - 1);
-					if (worktmp != null && !worktmp.equals("")) {
-						stliststr.put(getStatementNode((ASTNode)node), worktmp);
-					}/* else {
-						System.out.println("worktmpnull:" + node.toString());
-					}
-					/*
-					if (contains(splitCamelCase(node.toString()), assertarglist) != null) {
-						stliststr.put(getStatementNode((ASTNode)node), contains(splitCamelCase(node.toString()), assertarglist));
-					} else if (countflag >= 1 && arglist.size() > countflag - 1) {
-						stliststr.put(getStatementNode((ASTNode)node), contains(splitCamelCase(node.toString()), arglist.get(countflag - 1)));
-					}
-					*/
-					//lineliststr.put(cu.getLineNumber(node.getStartPosition()), node.toString());
-					//System.out.println(node.toString() +":a:" + cu.getLineNumber(node.getStartPosition()) +":"+ (countflag - 1));
-					
-				} else {
+				// exclude method info
+				if (!methodinvoname.contains(node.toString())) {
+					if (getStatementNode((ASTNode)node) != null && stlist.get(getStatementNode((ASTNode)node)) == null) {
+					//if (linelist.get(cu.getLineNumber(node.getStartPosition())) == null) {
+						stlist.put(getStatementNode((ASTNode)node), countflag - 1);
+						//linelist.put(cu.getLineNumber(node.getStartPosition()), countflag - 1);
+						if (worktmp != null && !worktmp.equals("")) {
+							stliststr.put(getStatementNode((ASTNode)node), worktmp);
+						}/* else {
+							System.out.println("worktmpnull:" + node.toString());
+						}
+						/*
+						if (contains(splitCamelCase(node.toString()), assertarglist) != null) {
+							stliststr.put(getStatementNode((ASTNode)node), contains(splitCamelCase(node.toString()), assertarglist));
+						} else if (countflag >= 1 && arglist.size() > countflag - 1) {
+							stliststr.put(getStatementNode((ASTNode)node), contains(splitCamelCase(node.toString()), arglist.get(countflag - 1)));
+						}
+						*/
+						//lineliststr.put(cu.getLineNumber(node.getStartPosition()), node.toString());
+						//System.out.println(node.toString() +":a:" + cu.getLineNumber(node.getStartPosition()) +":"+ (countflag - 1));
+					} else {
 					//System.out.println(node.toString() +":b:" + cu.getLineNumber(node.getStartPosition()) +":"+ (countflag - 1));
+					}
 				}
 
 			} else { // add simplename
 				
-				if (!methodinvoname.contains(node.toString())) {
+				//if (!methodinvoname.contains(node.toString())) {
 					for(int j = 2; j < countflag; j++) {
 						if (contains(splitCamelCase(node.toString()), arglist.get(j - 2)) != null) {
 							//System.out.println(node.toString());
@@ -276,7 +284,7 @@ public class ASTVisitorImpl extends ASTVisitor {
 							arglist.add(arglistcount);
 						}
 					}
-				}
+				//}
 			}
 		}
 		
