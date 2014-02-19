@@ -338,20 +338,25 @@ public class SelectionView extends ViewPart {
 				ASTStatementVisitorImpl aststvis = new ASTStatementVisitorImpl(stlistall, stliststrall);
 				aststvis.setCurrentMethod(methodname);
 				//aststvis.setLevel(2);
+				str.append("--------------half level-----------------\n");
+
 				aststvis.setLevelbyRate(0.5);
 				unitp.accept(aststvis);
 				str.append(aststvis.getString());
 				
-				str.append("-----------------------------------\n");
+				str.append("--------------all level-----------------\n");
 				aststvis = new ASTStatementVisitorImpl(stlistall, stliststrall);
 				aststvis.setCurrentMethod(methodname);
 				aststvis.setLevelbyRate(1.0);
 				unitp.accept(aststvis);
 				str.append(aststvis.getString());
-				str.append("-----------------------------------\n");
+				str.append("--------------assert to max from last-------------\n");
 				
 				str.append(createLastAssert(aststvis.getStrlist(), aststvis.getLevel()));
-				
+				str.append("--------------assert to first from last-------------\n");
+
+				str.append(createLastAssert2(aststvis.getStrlist(), aststvis.getLevel()));
+
 				aststvis.clearString();
 				
 			}
@@ -450,9 +455,9 @@ public class SelectionView extends ViewPart {
 					currentstr = lstr;
 				}
 			}
-			if (level > 0 && current >= level) {
-				writeflag = false;
-			}
+			/*if (level > 0 && current >= level) {
+				//writeflag = false;
+			}*/
 		}
 		return sb.toString();
 	}
