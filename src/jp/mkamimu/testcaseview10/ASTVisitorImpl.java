@@ -164,7 +164,7 @@ public class ASTVisitorImpl extends ASTVisitor {
 		//System.out.println("currentmethod:" + currentMethodName);
 		
 		boolean tmpflag = false; 
-		System.out.println(countflag + ": Simple:" + node.toString());
+		//System.out.println(countflag + ": Simple:" + node.toString());
 		//System.out.println(countflag + ": Simpleline:" + cu.getLineNumber(node.getStartPosition()));
 		//System.out.println("SimpleParent:" + node.getParent().toString());
 		String worktmp = null;
