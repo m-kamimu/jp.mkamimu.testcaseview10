@@ -164,7 +164,7 @@ public class ASTVisitorImpl extends ASTVisitor {
 		//System.out.println("currentmethod:" + currentMethodName);
 		
 		boolean tmpflag = false; 
-		//System.out.println(countflag + ": Simple:" + node.toString());
+		System.out.println(countflag + ": Simple:" + node.toString());
 		//System.out.println(countflag + ": Simpleline:" + cu.getLineNumber(node.getStartPosition()));
 		//System.out.println("SimpleParent:" + node.getParent().toString());
 		String worktmp = null;
@@ -172,9 +172,9 @@ public class ASTVisitorImpl extends ASTVisitor {
 		
 		if (!this.searchmode) { // false : get simplename
 			if (countflag > 0) {
-				if (methodinvoname.contains(node.toString())) {
+				/*if (methodinvoname.contains(node.toString())) {
 					return super.visit(node); // tmpflag = false;
-				}
+				}*/
 
 				if (countflag == 1) {
 					// node is equal to assert arg
@@ -318,7 +318,7 @@ public class ASTVisitorImpl extends ASTVisitor {
 	 */
 	@Override
 	public boolean visit(MethodInvocation node) {
-		if (!methodinvoname.contains(node.getName().toString())) {
+		if (!node.getName().toString().startsWith("assert") && !methodinvoname.contains(node.getName().toString())) {
 			methodinvoname.add(node.getName().toString());
 		}
 		
