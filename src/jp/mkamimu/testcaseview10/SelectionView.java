@@ -357,6 +357,10 @@ public class SelectionView extends ViewPart {
 
 				str.append(createLastAssert2(aststvis.getStrlist(), aststvis.getLevel()));
 
+				str.append("--------------assert once from last-------------\n");
+				str.append(createLastAssert3(aststvis.getStrlist(), aststvis.getLevel()));
+
+				
 				aststvis.clearString();
 				
 			}
@@ -453,6 +457,36 @@ public class SelectionView extends ViewPart {
 					sb.insert(0,String.format("%2d:%-20s:\t%s", l, lstr, line));
 					current = l;
 					currentstr = lstr;
+				}
+			}
+			/*if (level > 0 && current >= level) {
+				//writeflag = false;
+			}*/
+		}
+		return sb.toString();
+	}
+
+
+	private String createLastAssert3(List<StrData> strdlist , int level) {
+		StringBuffer sb = new StringBuffer();
+		List<Integer> current = new ArrayList<Integer>(); 
+		List<String> currentstr = new ArrayList<String>();
+		
+		boolean writeflag = false;
+		for(int i = strdlist.size() - 1; i >= 0; i--) {
+			int l = strdlist.get(i).getL();
+			String line = strdlist.get(i).getLine();
+			String lstr = strdlist.get(i).getLstr();
+			if (!writeflag && line.contains("assert")) {
+				writeflag = true;
+				sb.insert(0,String.format("%2d:%-20s:\t%s", l, lstr, line));
+				current.add(l);
+				currentstr.add(lstr);
+			} else if (writeflag) {
+				if (!current.contains(l) || !currentstr.contains(lstr)) {
+					sb.insert(0,String.format("%2d:%-20s:\t%s", l, lstr, line));
+					current.add(l);
+					currentstr.add(lstr);
 				}
 			}
 			/*if (level > 0 && current >= level) {

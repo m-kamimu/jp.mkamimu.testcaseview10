@@ -233,7 +233,7 @@ public class ASTVisitorImpl extends ASTVisitor {
 		}
 			
 		if (tmpflag == true) {
-			System.out.println("allflag: " + worktmp + ":" + this.searchmode);
+			//System.out.println("allflag: " + worktmp + ":" + this.searchmode);
 			sntmpflag++;
 		}
 
