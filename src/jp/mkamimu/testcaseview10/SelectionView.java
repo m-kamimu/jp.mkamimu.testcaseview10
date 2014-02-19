@@ -426,6 +426,36 @@ public class SelectionView extends ViewPart {
 		}
 		return sb.toString();
 	}
+
 	
+	private String createLastAssert2(List<StrData> strdlist , int level) {
+		StringBuffer sb = new StringBuffer();
+		int current = 0;
+		String currentstr = null;
+		
+		boolean writeflag = false;
+		for(int i = strdlist.size() - 1; i >= 0; i--) {
+			int l = strdlist.get(i).getL();
+			String line = strdlist.get(i).getLine();
+			String lstr = strdlist.get(i).getLstr();
+			if (line.contains("assert")) {
+				writeflag = true;
+				sb.insert(0,String.format("%2d:%-20s:\t%s", l, lstr, line));
+				current = l;
+				currentstr = lstr;
+			} else if (writeflag) {
+				if (current < l || !currentstr.equals(lstr)) {
+					sb.insert(0,String.format("%2d:%-20s:\t%s", l, lstr, line));
+					current = l;
+					currentstr = lstr;
+				}
+			}
+			if (level > 0 && current >= level) {
+				writeflag = false;
+			}
+		}
+		return sb.toString();
+	}
+
 	
 }

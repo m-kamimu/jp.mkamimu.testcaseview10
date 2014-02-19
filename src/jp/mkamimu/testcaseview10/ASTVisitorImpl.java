@@ -148,7 +148,7 @@ public class ASTVisitorImpl extends ASTVisitor {
 		}
 		
 		/*
-		if (methodinvoname.contains(node.toString())) {
+		if (this.searchmode && methodinvoname.contains(node.toString())) {
 			return super.visit(node);
 		}*/
 		
@@ -172,6 +172,10 @@ public class ASTVisitorImpl extends ASTVisitor {
 		
 		if (!this.searchmode) { // false : get simplename
 			if (countflag > 0) {
+				if (methodinvoname.contains(node.toString())) {
+					return super.visit(node); // tmpflag = false;
+				}
+
 				if (countflag == 1) {
 					// node is equal to assert arg
 					if (contains(splitCamelCase(node.toString()), assertarglist) != null) {
@@ -179,11 +183,12 @@ public class ASTVisitorImpl extends ASTVisitor {
 						worktmp = contains(splitCamelCase(node.toString()), assertarglist);
 					}
 					// node parent is equal to assert arg
+					/*
 					if (!tmpflag && node.getParent() != null 
 							&& contains(splitCamelCase(node.getParent().toString()), assertarglist) != null) {
 						tmpflag = true;
 						worktmp = contains(splitCamelCase(node.getParent().toString()), assertarglist); 
-					}
+					}*/
 					
 				} else if (arglist.size() > countflag - 2) {
 					// node is in previous list.
@@ -192,11 +197,12 @@ public class ASTVisitorImpl extends ASTVisitor {
 						worktmp = contains(splitCamelCase(node.toString()), arglist.get(countflag - 2));
 					}
 					// node parent is in previous list
+					/*
 					if (!tmpflag && node.getParent() != null 
 							&& contains(splitCamelCase(node.getParent().toString()), arglist.get(countflag - 2))  != null) {
 						tmpflag = true;
 						worktmp = contains(splitCamelCase(node.getParent().toString()), arglist.get(countflag - 2));
-					}
+					}*/
 	
 					// but parent is already in previous list. false;.
 					for(int j = 2; j < countflag; j++) {
@@ -207,13 +213,9 @@ public class ASTVisitorImpl extends ASTVisitor {
 					}
 					
 				}
+
 			}
 		} else { // true: get Statement  -> add simplename
-			// exclude method info
-			if (methodinvoname.contains(node.toString())) {
-				return super.visit(node);
-			}
-			
 			// Statement already has number
 			if (!tmpflag && getStatementNode((ASTNode)node) != null && stlist.get(getStatementNode((ASTNode)node)) != null) {
 			//if (linelist.get(cu.getLineNumber(node.getStartPosition())) != null) {
@@ -231,9 +233,9 @@ public class ASTVisitorImpl extends ASTVisitor {
 		}
 			
 		if (tmpflag == true) {
+			System.out.println("allflag: " + worktmp + ":" + this.searchmode);
 			sntmpflag++;
 		}
-		//System.out.println("allflag: " + tmpflag);
 
 		if (sntmpflag > 0) {
 			if (!this.searchmode) { // add number
@@ -366,7 +368,7 @@ public class ASTVisitorImpl extends ASTVisitor {
 	}
 	
 	
-	private static List<String> splitCamelCase(String s) {
+	private List<String> splitCamelCase(String s) {
 	   String s2 = s.replace(".", " ");
 	   String s3 = s2.replace("(", " ");
 	   String s4 = s3.replace(")"," ");
