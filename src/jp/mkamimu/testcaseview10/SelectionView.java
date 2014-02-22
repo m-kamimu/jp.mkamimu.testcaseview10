@@ -277,6 +277,30 @@ public class SelectionView extends ViewPart {
 		assertnum = 0;
 	}
 	
+	public void getOneMethodICompilationUnitLineInfo(ICompilationUnit unit) 
+			throws JavaModelException {
+
+		// assert statement search
+		ASTParser parser = ASTParser.newParser(AST.JLS4);
+		parser.setSource(unit);
+		
+		CompilationUnit unitp = (CompilationUnit)parser.createAST(new NullProgressMonitor());
+		
+		System.out.println("Start");
+		ASTMethodDeclarationLineVisitorImpl astmvis = new ASTMethodDeclarationLineVisitorImpl();
+		unitp.accept(astmvis);
+		if (astmvis.isAllassertFlag()) {
+			this.assertnum = 1;
+		} else {
+			this.assertnum = 0;
+		}
+		this.maxnum = astmvis.getMaxint();
+		
+	}
+	
+	
+	
+	
 	public String getOneMethodICompilationUnitInfo(ICompilationUnit unit) 
 			throws JavaModelException {
 		//getAllMethodICompliationUnitInfo(unit.getJavaProject());
@@ -321,10 +345,13 @@ public class SelectionView extends ViewPart {
 				unitp.accept(astvis);
 			}
 			
+			
 			String tmpsb = astvis.printassertarglist();
+			/*
 			if (tmpsb.length() > 0) {
 				setassertNum(1);
 			}
+			*/
 			astvis.printarglist();
 			//astvis.printwholelist();
 	
