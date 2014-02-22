@@ -350,15 +350,15 @@ public class SelectionView extends ViewPart {
 				aststvis.setLevelbyRate(1.0);
 				unitp.accept(aststvis);
 				str.append(aststvis.getString());
-				str.append("--------------assert to max from last-------------\n");
+				//str.append("--------------assert to max from last-------------\n");
 				
-				str.append(createLastAssert(aststvis.getStrlist(), aststvis.getLevel()));
+				//str.append(createLastAssert(aststvis.getStrlist(), aststvis.getLevel()));
 				str.append("--------------assert to first from last-------------\n");
 
 				str.append(createLastAssert2(aststvis.getStrlist(), aststvis.getLevel()));
 
-				str.append("--------------assert once from last-------------\n");
-				str.append(createLastAssert3(aststvis.getStrlist(), aststvis.getLevel()));
+				//str.append("--------------assert once from last-------------\n");
+				//str.append(createLastAssert3(aststvis.getStrlist(), aststvis.getLevel()));
 
 				
 				aststvis.clearString();
