@@ -286,7 +286,7 @@ public class SelectionView extends ViewPart {
 		
 		CompilationUnit unitp = (CompilationUnit)parser.createAST(new NullProgressMonitor());
 		
-		System.out.println("Start");
+		//System.out.println("Start");
 		ASTMethodDeclarationLineVisitorImpl astmvis = new ASTMethodDeclarationLineVisitorImpl();
 		unitp.accept(astmvis);
 		if (astmvis.isAllassertFlag()) {
