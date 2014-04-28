@@ -348,7 +348,7 @@ public class ASTVisitorImpl extends ASTVisitor {
 			//System.out.println("assertnodep:" + node.getExpression());
 			
 			assertFlag = true;
-		} else if (!(assertFlag || node.getName().toString().startsWith("assert"))) {
+		//} else if (!(assertFlag || node.getName().toString().startsWith("assert"))) {
 			//methodnamelist.add(node.getName().toString());
 		}
 		
