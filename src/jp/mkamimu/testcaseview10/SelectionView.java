@@ -390,6 +390,16 @@ public class SelectionView extends ViewPart {
 				
 				aststvis.clearString();
 				
+				
+				ASTVisitorAssignImpl astvisas = new ASTVisitorAssignImpl();
+				unitp.accept(astvisas);
+				str.append("--------------assign info-------------\n");
+				str.append(astvisas.printTestInformation(methodname));
+
+				str.append("--------------assign no new info-------------\n");
+				str.append(astvisas.printNoNewTestInformation(methodname));
+
+				
 			}
 		}
 		
