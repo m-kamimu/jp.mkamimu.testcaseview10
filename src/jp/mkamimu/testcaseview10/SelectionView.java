@@ -399,6 +399,9 @@ public class SelectionView extends ViewPart {
 				str.append("--------------assign no new info-------------\n");
 				str.append(astvisas.printNoNewTestInformation(methodname));
 
+				str.append("--------------assign new info-------------\n");
+				str.append(astvisas.printNewTestInformation(methodname));
+
 				
 			}
 		}

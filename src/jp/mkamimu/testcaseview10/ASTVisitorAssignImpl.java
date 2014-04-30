@@ -34,7 +34,7 @@ public class ASTVisitorAssignImpl extends ASTVisitor {
 				str.append("::");
 				str.append(rightlist.get(j));
 				*/
-				str.append(String.format("%-20s:\t%s", leftlist.get(j), rightlist.get(j)));
+				str.append(String.format("%-20s=\t%s", leftlist.get(j), rightlist.get(j)));
 				str.append("\n");
 			}
 			//str.append("\n");
@@ -63,7 +63,7 @@ public class ASTVisitorAssignImpl extends ASTVisitor {
 				str.append(rightlist.get(j));
 				*/
 				if (!rightlist.get(j).contains("new ")) {
-					str.append(String.format("%-20s:\t%s", leftlist.get(j), rightlist.get(j)));
+					str.append(String.format("%-20s=\t%s", leftlist.get(j), rightlist.get(j)));
 					str.append("\n");
 				}
 			}
@@ -72,6 +72,35 @@ public class ASTVisitorAssignImpl extends ASTVisitor {
 		return str.toString();
 	}
 	
+	public String printNewTestInformation(String argtestinfo) {
+		StringBuffer str = new StringBuffer();
+		List<AssignInformation> asn = this.localTestInformation.getAssigninfo();
+		
+		for(int i = 0; i < asn.size(); i++) {
+			String testinfo = asn.get(i).getTestinfo();
+			if (!argtestinfo.equals(testinfo)) {
+				continue;
+			}
+			List<String> leftlist = asn.get(i).getLeftList();
+			List<String> rightlist = asn.get(i).getRightList();
+			for(int j = 0; j < leftlist.size(); j++) {
+				/*
+				str.append(testinfo);
+				str.append(":");
+				str.append(leftlist.get(j));
+				str.append("::");
+				str.append(rightlist.get(j));
+				*/
+				if (rightlist.get(j).contains("new ")) {
+					str.append(String.format("%-20s=\t%s", leftlist.get(j), rightlist.get(j)));
+					str.append("\n");
+				}
+			}
+			//str.append("\n");
+		}
+		return str.toString();
+	}
+
 	
 
 	/* (non-Javadoc)
