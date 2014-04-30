@@ -388,8 +388,6 @@ public class SelectionView extends ViewPart {
 				//str.append(createLastAssert3(aststvis.getStrlist(), aststvis.getLevel()));
 
 				
-				aststvis.clearString();
-				
 				
 				ASTVisitorAssignImpl astvisas = new ASTVisitorAssignImpl();
 				unitp.accept(astvisas);
@@ -401,6 +399,34 @@ public class SelectionView extends ViewPart {
 
 				str.append("--------------assign new info-------------\n");
 				str.append(astvisas.printNewTestInformation(methodname));
+
+				aststvis.clearString();
+
+				//str.append("--------------all level-----------------\n");
+
+				aststvis = new ASTStatementVisitorImpl(stlistall, stliststrall);
+				aststvis.setCurrentMethod(methodname);
+				aststvis.setLevelbyRate(1.0);
+				unitp.accept(aststvis);
+				//str.append(aststvis.getString());
+				
+				str.append("--------------assign + slice? info-------------\n");
+
+				str.append(createLastAssert4(aststvis.getStrlist(), aststvis.getLevel()));
+
+				str.append("--------------assign no  + slice? info-------------\n");
+				str.append(createLastAssert5(aststvis.getStrlist(), aststvis.getLevel()));
+
+				str.append("--------------assign + slice? all info-------------\n");
+
+				str.append(createLastAssert4all(aststvis.getStrlist(), aststvis.getLevel()));
+
+				str.append("--------------assign no  + slice? all info-------------\n");
+				str.append(createLastAssert5all(aststvis.getStrlist(), aststvis.getLevel()));
+
+				
+				aststvis.clearString();
+				
 
 				
 			}
@@ -535,6 +561,126 @@ public class SelectionView extends ViewPart {
 		}
 		return sb.toString();
 	}
+	
+
+	private String createLastAssert4(List<StrData> strdlist , int level) {
+		StringBuffer sb = new StringBuffer();
+		List<Integer> current = new ArrayList<Integer>(); 
+		List<String> currentstr = new ArrayList<String>();
+		
+		boolean writeflag = false;
+		for(int i = strdlist.size() - 1; i >= 0; i--) {
+			int l = strdlist.get(i).getL();
+			String line = strdlist.get(i).getLine();
+			String lstr = strdlist.get(i).getLstr();
+			if (!writeflag && line.contains("assert")) {
+				writeflag = true;
+				sb.insert(0,String.format("%2d:%-20s:\t%s", l, lstr, line));
+				current.add(l);
+				currentstr.add(lstr);
+			} else if (writeflag && line.contains("=")) {
+				if (!current.contains(l) || !currentstr.contains(lstr)) {
+					sb.insert(0,String.format("%2d:%-20s:\t%s", l, lstr, line));
+					current.add(l);
+					currentstr.add(lstr);
+				}
+			}
+			/*if (level > 0 && current >= level) {
+				//writeflag = false;
+			}*/
+		}
+		return sb.toString();
+	}
+
+
+	private String createLastAssert5(List<StrData> strdlist , int level) {
+		StringBuffer sb = new StringBuffer();
+		List<Integer> current = new ArrayList<Integer>(); 
+		List<String> currentstr = new ArrayList<String>();
+		
+		boolean writeflag = false;
+		for(int i = strdlist.size() - 1; i >= 0; i--) {
+			int l = strdlist.get(i).getL();
+			String line = strdlist.get(i).getLine();
+			String lstr = strdlist.get(i).getLstr();
+			if (!writeflag && line.contains("assert")) {
+				writeflag = true;
+				sb.insert(0,String.format("%2d:%-20s:\t%s", l, lstr, line));
+				current.add(l);
+				currentstr.add(lstr);
+			} else if (writeflag && !line.contains("=")) {
+				if (!current.contains(l) || !currentstr.contains(lstr)) {
+					sb.insert(0,String.format("%2d:%-20s:\t%s", l, lstr, line));
+					current.add(l);
+					currentstr.add(lstr);
+				}
+			}
+			/*if (level > 0 && current >= level) {
+				//writeflag = false;
+			}*/
+		}
+		return sb.toString();
+	}
+	
+	private String createLastAssert4all(List<StrData> strdlist , int level) {
+		StringBuffer sb = new StringBuffer();
+		List<Integer> current = new ArrayList<Integer>(); 
+		List<String> currentstr = new ArrayList<String>();
+		
+		boolean writeflag = false;
+		for(int i = strdlist.size() - 1; i >= 0; i--) {
+			int l = strdlist.get(i).getL();
+			String line = strdlist.get(i).getLine();
+			String lstr = strdlist.get(i).getLstr();
+			if (!writeflag && line.contains("assert")) {
+				writeflag = true;
+				sb.insert(0,String.format("%2d:%-20s:\t%s", l, lstr, line));
+				current.add(l);
+				currentstr.add(lstr);
+			} else if (writeflag && line.contains("=")) {
+				//if (!current.contains(l) || !currentstr.contains(lstr)) {
+					sb.insert(0,String.format("%2d:%-20s:\t%s", l, lstr, line));
+					current.add(l);
+					currentstr.add(lstr);
+				//}
+			}
+			/*if (level > 0 && current >= level) {
+				//writeflag = false;
+			}*/
+		}
+		return sb.toString();
+	}
+
+
+	private String createLastAssert5all(List<StrData> strdlist , int level) {
+		StringBuffer sb = new StringBuffer();
+		List<Integer> current = new ArrayList<Integer>(); 
+		List<String> currentstr = new ArrayList<String>();
+		
+		boolean writeflag = false;
+		for(int i = strdlist.size() - 1; i >= 0; i--) {
+			int l = strdlist.get(i).getL();
+			String line = strdlist.get(i).getLine();
+			String lstr = strdlist.get(i).getLstr();
+			if (!writeflag && line.contains("assert")) {
+				writeflag = true;
+				sb.insert(0,String.format("%2d:%-20s:\t%s", l, lstr, line));
+				current.add(l);
+				currentstr.add(lstr);
+			} else if (writeflag && !line.contains("=")) {
+				//if (!current.contains(l) || !currentstr.contains(lstr)) {
+					sb.insert(0,String.format("%2d:%-20s:\t%s", l, lstr, line));
+					current.add(l);
+					currentstr.add(lstr);
+				//}
+			}
+			/*if (level > 0 && current >= level) {
+				//writeflag = false;
+			}*/
+		}
+		return sb.toString();
+	}
+	
 
 	
 }
