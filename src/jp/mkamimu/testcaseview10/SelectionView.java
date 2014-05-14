@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 
 import org.eclipse.core.resources.IProject;
@@ -384,6 +385,10 @@ public class SelectionView extends ViewPart {
 
 				str.append(createLastAssert2(aststvis.getStrlist(), aststvis.getLevel()));
 
+				str.append("--------------assert to first from last longest-------------\n");
+
+				str.append(createLongAssert(aststvis.getStrlist(), aststvis.getLevel()));
+				
 				//str.append("--------------assert once from last-------------\n");
 				//str.append(createLastAssert3(aststvis.getStrlist(), aststvis.getLevel()));
 
@@ -532,6 +537,46 @@ public class SelectionView extends ViewPart {
 		return sb.toString();
 	}
 
+	private String createLongAssert(List<StrData> strdlist , int level) {
+		StringBuffer sb = new StringBuffer();
+		int current = 0;
+		String currentstr = null;
+		String currentLongline = null;
+		
+		boolean writeflag = false;
+		for(int i = strdlist.size() - 1; i >= 0; i--) {
+			int l = strdlist.get(i).getL();
+			String line = strdlist.get(i).getLine();
+			String lstr = strdlist.get(i).getLstr();
+			if (line.contains("assert")) {
+				writeflag = true;
+				sb.insert(0,String.format("%2d:%-20s:\t%s", l, lstr, line));
+				current = l;
+				currentstr = lstr;
+				currentLongline = line;
+			} else if (writeflag) {
+				if (current < l || !currentstr.equals(lstr)) {
+					if (!currentLongline.contains("assert")) {
+						sb.insert(0,String.format("%2d:%-20s:\t%s", current, currentstr, currentLongline));
+					}
+					current = l;
+					currentstr = lstr;
+					currentLongline = line;
+				} else if (current == l || currentstr.equals(lstr)) {
+					if (currentLongline.length() < line.length()) {
+						current = l;
+						currentstr = lstr;
+						currentLongline = line;
+					}
+				}
+			}
+		}
+		if (currentstr != null && currentLongline != null) {
+			sb.insert(0,String.format("%2d:%-20s:\t%s", current, currentstr, currentLongline));
+		}
+		return sb.toString();
+	}
+	
 
 	private String createLastAssert3(List<StrData> strdlist , int level) {
 		StringBuffer sb = new StringBuffer();
